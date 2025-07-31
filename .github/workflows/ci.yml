@@ -8,7 +8,6 @@ on:
 
 env:
   DOTNET_VERSION: '9.0.x'
-  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
 jobs:
   test:
@@ -52,7 +51,7 @@ jobs:
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
       with:
-        token: ${{ env.CODECOV_TOKEN }}
+        token: ${{ secrets.CODECOV_TOKEN }}
         files: ./TestResults/**/coverage.cobertura.xml
         directory: ./TestResults
         flags: unittests
@@ -163,7 +162,7 @@ jobs:
         
         # Check minimum thresholds
         MIN_COVERAGE=85
-        if (( $(echo "${COVERAGE} < ${MIN_COVERAGE}" | bc -l) )); then
+        if awk "BEGIN {exit !(${COVERAGE} < ${MIN_COVERAGE})}"; then
           echo "❌ Coverage ${COVERAGE}% is below minimum threshold of ${MIN_COVERAGE}%"
           exit 1
         else

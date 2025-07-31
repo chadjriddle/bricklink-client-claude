@@ -23,7 +23,8 @@
       "Bash(dotnet add:*)",
       "Bash(dotnet build:*)",
       "Bash(mkdir:*)",
-      "Bash(git stash:*)"
+      "Bash(git stash:*)",
+      "Bash(git config:*)"
     ],
     "deny": []
   }

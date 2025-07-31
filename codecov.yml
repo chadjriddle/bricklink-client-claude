@@ -29,7 +29,7 @@ coverage:
     - "**/bin/**"
     - "**/obj/**"
     - "TestResults/**"
-    - "BrickLink.Client.Tests/**"
+    - "**/*.Tests/**"
 
 comment:
   layout: "reach,diff,flags,tree"
