@@ -105,6 +105,56 @@ Additional permissions may need to be granted for .NET CLI operations.
 - Inventory management (for store owners)
 - Webhook/push notifications
 
+## Development Principles
+
+### Atomic Development & Single Responsibility
+Every task and commit should follow these core principles:
+
+- **Atomic Units of Work** - Each task should represent a single, complete unit of functionality that can be developed, tested, and committed independently
+- **Single Responsibility** - Each class, method, and commit should have one clear purpose and reason to change
+- **Incremental Progress** - Build functionality incrementally, with each step being a working, testable improvement
+- **Clear Boundaries** - Separate concerns cleanly (authentication, models, services, etc.) with well-defined interfaces
+
+### Task Workflow
+When working on tasks from `docs/tasks.md`, follow this strict workflow:
+
+#### Before Starting Any Task:
+1. **Pull Latest Changes** - Always start with `git pull origin main` to ensure you have the latest code
+2. **Create Feature Branch** - Create a new branch using the naming convention: `feature/task-description` or `feature/milestone-X-task-name`
+   ```bash
+   git checkout -b feature/implement-authentication-handler
+   ```
+3. **Verify Clean State** - Ensure working directory is clean and on the correct branch
+
+#### During Task Development:
+1. **One Task, One Branch** - Each task gets its own dedicated feature branch
+2. **Complete Implementation** - Don't leave tasks partially implemented
+3. **Test Coverage** - Include tests for each new piece of functionality
+4. **Documentation** - Update XML docs and README as functionality is added
+5. **Clean Code** - Follow C# coding conventions and ensure code is self-documenting
+
+#### After Task Completion:
+1. **Verify & Test** - Ensure all tests pass and code compiles successfully
+2. **Commit Changes** - Make a single, atomic commit for the completed task
+3. **Push Branch** - Push the feature branch to remote repository
+   ```bash
+   git push -u origin feature/task-name
+   ```
+4. **Merge to Main** - Merge the feature branch back to main (or create PR if using pull request workflow)
+5. **Clean Up** - Delete the feature branch locally and remotely after successful merge
+
+### Branch Naming Conventions
+- `feature/milestone-1-project-setup` - For milestone tasks
+- `feature/implement-oauth-handler` - For specific implementation tasks
+- `feature/add-catalog-models` - For model/data structure tasks
+- `hotfix/fix-authentication-bug` - For urgent bug fixes
+
+### Commit Strategy
+- Each commit should represent a complete, working feature or fix
+- Commits should compile and pass all tests
+- Use descriptive commit messages that explain the "why" not just the "what"
+- Follow conventional commit format when possible: `feat:`, `fix:`, `docs:`, `test:`
+
 ## Documentation
 
 See `docs/tasks.md` for detailed project milestones and task breakdown.
