@@ -34,7 +34,8 @@
       "Bash(del \"C:\\code\\ClaudeCode\\bricklink-client-claude\\BrickLink.Client\\Logging\\HttpLoggingHandlerTests.cs\")",
       "Bash(powershell:*)",
       "WebFetch(domain:docs.anthropic.com)",
-      "Bash(start ./TestResults/coveragereport/BrickLink.Client_HttpLoggingHandler.html)"
+      "Bash(start ./TestResults/coveragereport/BrickLink.Client_HttpLoggingHandler.html)",
+      "Bash(dotnet run:*)"
     ],
     "deny": []
   }
