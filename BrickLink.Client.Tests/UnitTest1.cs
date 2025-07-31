@@ -1,4 +1,4 @@
-﻿using BrickLink.Client;
+using BrickLink.Client;
 
 namespace BrickLink.Client.Tests;
 

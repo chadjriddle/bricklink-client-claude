@@ -1,4 +1,4 @@
-﻿namespace BrickLink.Client;
+namespace BrickLink.Client;
 
 /// <summary>
 /// Temporary placeholder class for testing CI/CD pipeline and coverage reporting.

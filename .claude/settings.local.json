@@ -24,7 +24,8 @@
       "Bash(dotnet build:*)",
       "Bash(mkdir:*)",
       "Bash(git stash:*)",
-      "Bash(git config:*)"
+      "Bash(git config:*)",
+      "Bash(dotnet format:*)"
     ],
     "deny": []
   }
