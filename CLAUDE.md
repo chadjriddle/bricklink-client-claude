@@ -178,6 +178,40 @@ When working on tasks from `docs/tasks.md`, follow this strict workflow:
 4. **Documentation** - Update XML docs and README as functionality is added
 5. **Clean Code** - Follow C# coding conventions and ensure code is self-documenting
 
+#### CRITICAL: Just-In-Time Interface Creation
+**DO NOT create interfaces, contracts, or placeholder types until they are immediately needed for the specific functional task being implemented.**
+
+**Rules for Interface Creation:**
+- **Create interfaces ONLY when implementing their concrete classes** - Never create "architectural contracts" in advance
+- **Design interfaces based on actual implementation needs** - Not theoretical or anticipated requirements
+- **One interface per task** - If a task requires multiple interfaces, break it into smaller tasks
+- **No placeholder types** - Create real models based on actual API responses, not assumptions
+- **Validate interface design against real data** - Test with actual BrickLink API responses before finalizing contracts
+
+**Example of WRONG approach:**
+```
+❌ Task: "Create all service interfaces for future implementation"
+❌ Creating IApiClient, ICatalogService, IColorService all at once
+❌ Using placeholder models without real API data
+```
+
+**Example of CORRECT approach:**
+```
+✅ Task: "Implement authentication handler"
+✅ Create IAuthenticationHandler only when implementing AuthenticationHandler class
+✅ Task: "Implement catalog item retrieval"
+✅ Create ICatalogService only when implementing CatalogService class
+✅ Design CatalogItem model based on actual API response JSON
+```
+
+**Benefits of Just-In-Time Creation:**
+- Interfaces reflect actual implementation needs, not assumptions
+- Models match real API data structures
+- Smaller, focused PRs that are easier to review
+- Eliminates over-engineering and premature optimization
+- True adherence to YAGNI (You Aren't Gonna Need It) principle
+- Reduces coupling between components
+
 #### After Task Completion:
 1. **Run Full Test Suite** - Execute all tests to ensure nothing is broken
    ```bash
