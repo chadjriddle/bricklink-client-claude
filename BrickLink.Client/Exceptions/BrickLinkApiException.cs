@@ -105,8 +105,8 @@ public class BrickLinkApiException : Exception
     public static BrickLinkApiException CreateAuthenticationError(string message, Exception? innerException = null)
     {
         return innerException != null
-            ? new BrickLinkApiException(message, HttpStatusCode.Unauthorized, 401, "Authentication failed. Please verify your API credentials and signature.", innerException)
-            : new BrickLinkApiException(message, HttpStatusCode.Unauthorized, 401, "Authentication failed. Please verify your API credentials and signature.");
+            ? new BrickLinkApiException(message, HttpStatusCode.Unauthorized, (int)HttpStatusCode.Unauthorized, "Authentication failed. Please verify your API credentials and signature.", innerException)
+            : new BrickLinkApiException(message, HttpStatusCode.Unauthorized, (int)HttpStatusCode.Unauthorized, "Authentication failed. Please verify your API credentials and signature.");
     }
 
     /// <summary>
@@ -117,7 +117,7 @@ public class BrickLinkApiException : Exception
     /// <returns>A new instance of <see cref="BrickLinkApiException"/> configured for not found errors.</returns>
     public static BrickLinkApiException CreateNotFoundError(string resourceType, string resourceId)
     {
-        return new BrickLinkApiException($"The requested {resourceType} '{resourceId}' was not found.", HttpStatusCode.NotFound, 404,
+        return new BrickLinkApiException($"The requested {resourceType} '{resourceId}' was not found.", HttpStatusCode.NotFound, (int)HttpStatusCode.NotFound,
             $"The {resourceType} with identifier '{resourceId}' does not exist in the BrickLink catalog.");
     }
 
@@ -133,7 +133,7 @@ public class BrickLinkApiException : Exception
             ? $"Rate limit exceeded. Retry after {retryAfter.Value} seconds."
             : "Rate limit exceeded. Please implement exponential backoff and retry logic.";
 
-        return new BrickLinkApiException(message, HttpStatusCode.TooManyRequests, 429, description);
+        return new BrickLinkApiException(message, HttpStatusCode.TooManyRequests, (int)HttpStatusCode.TooManyRequests, description);
     }
 
     /// <summary>
@@ -145,7 +145,7 @@ public class BrickLinkApiException : Exception
     /// <returns>A new instance of <see cref="BrickLinkApiException"/> configured for validation errors.</returns>
     public static BrickLinkApiException CreateValidationError(string parameterName, string parameterValue, string validationMessage)
     {
-        return new BrickLinkApiException($"Invalid parameter '{parameterName}': {validationMessage}", HttpStatusCode.BadRequest, 400,
+        return new BrickLinkApiException($"Invalid parameter '{parameterName}': {validationMessage}", HttpStatusCode.BadRequest, (int)HttpStatusCode.BadRequest,
             $"The parameter '{parameterName}' with value '{parameterValue}' is invalid. {validationMessage}");
     }
 
@@ -158,7 +158,7 @@ public class BrickLinkApiException : Exception
     public static BrickLinkApiException CreateServerError(string message, Exception? innerException = null)
     {
         return innerException != null
-            ? new BrickLinkApiException(message, HttpStatusCode.InternalServerError, 500, "An internal server error occurred. Please try again later.", innerException)
-            : new BrickLinkApiException(message, HttpStatusCode.InternalServerError, 500, "An internal server error occurred. Please try again later.");
+            ? new BrickLinkApiException(message, HttpStatusCode.InternalServerError, (int)HttpStatusCode.InternalServerError, "An internal server error occurred. Please try again later.", innerException)
+            : new BrickLinkApiException(message, HttpStatusCode.InternalServerError, (int)HttpStatusCode.InternalServerError, "An internal server error occurred. Please try again later.");
     }
 }
