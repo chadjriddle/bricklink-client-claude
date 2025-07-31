@@ -35,11 +35,18 @@ dotnet restore
 # Run all tests
 dotnet test
 
-# Run tests with coverage
-dotnet test --collect:"XPlat Code Coverage"
+# Run tests with coverage and generate HTML report
+dotnet test --collect:"XPlat Code Coverage" --results-directory:"./TestResults"
+dotnet tool install -g dotnet-reportgenerator-globaltool
+reportgenerator -reports:"./TestResults/**/coverage.cobertura.xml" -targetdir:"./TestResults/coveragereport" -reporttypes:Html
 
-# Run specific test project
-dotnet test tests/BrickLink.Client.Tests
+# Run specific test project with coverage
+dotnet test tests/BrickLink.Client.Tests --collect:"XPlat Code Coverage" --results-directory:"./TestResults"
+
+# View coverage report (opens HTML report in default browser)
+start ./TestResults/coveragereport/index.html    # Windows
+open ./TestResults/coveragereport/index.html     # macOS
+xdg-open ./TestResults/coveragereport/index.html # Linux
 ```
 
 ## Project Architecture
@@ -71,6 +78,42 @@ Critical mappings for data integrity:
 - **Timestamps** → `DateTimeOffset` (preserves timezone info)
 - **Identifiers** → `long` (accommodates large IDs)
 - **Controlled vocabularies** → C# enums (compile-time safety)
+
+## Code Coverage Requirements
+
+### Coverage Tools Setup
+```bash
+# Install ReportGenerator globally (one-time setup)
+dotnet tool install -g dotnet-reportgenerator-globaltool
+
+# Verify installation
+reportgenerator -help
+```
+
+### Coverage Standards
+- **Minimum Coverage**: 85% for all new code
+- **Authentication Components**: 90% minimum (critical security code)
+- **Public APIs**: 95% minimum (external-facing interfaces)
+- **Exception Paths**: 100% (all error handling must be tested)
+
+### Coverage Workflow Integration
+Every task completion must include:
+1. Running tests with coverage collection
+2. Generating HTML coverage report
+3. Reviewing coverage metrics in browser
+4. Meeting minimum coverage thresholds before commit
+5. Including coverage summary in commit message when relevant
+
+### Coverage Report Structure
+- **Line Coverage**: Percentage of executed code lines
+- **Branch Coverage**: Percentage of executed decision paths
+- **Method Coverage**: Percentage of methods with at least one test
+- **Class Coverage**: Percentage of classes with test coverage
+
+### Exclusions from Coverage
+- Auto-generated code (marked with `[ExcludeFromCodeCoverage]`)
+- Model classes with only properties (data transfer objects)
+- Explicit interface implementations that delegate to main implementation
 
 ## Development Environment
 
@@ -129,19 +172,36 @@ When working on tasks from `docs/tasks.md`, follow this strict workflow:
 #### During Task Development:
 1. **One Task, One Branch** - Each task gets its own dedicated feature branch
 2. **Complete Implementation** - Don't leave tasks partially implemented
-3. **Test Coverage** - Include tests for each new piece of functionality
+3. **Test Coverage** - Include comprehensive unit tests for each new piece of functionality
 4. **Documentation** - Update XML docs and README as functionality is added
 5. **Clean Code** - Follow C# coding conventions and ensure code is self-documenting
 
 #### After Task Completion:
-1. **Verify & Test** - Ensure all tests pass and code compiles successfully
-2. **Commit Changes** - Make a single, atomic commit for the completed task
-3. **Push Branch** - Push the feature branch to remote repository
+1. **Run Full Test Suite** - Execute all tests to ensure nothing is broken
+   ```bash
+   dotnet test
+   ```
+2. **Generate Coverage Report** - Run tests with coverage and generate HTML report
+   ```bash
+   dotnet test --collect:"XPlat Code Coverage" --results-directory:"./TestResults"
+   reportgenerator -reports:"./TestResults/**/coverage.cobertura.xml" -targetdir:"./TestResults/coveragereport" -reporttypes:Html
+   ```
+3. **Review Coverage Report** - Open and review the HTML coverage report to ensure adequate test coverage
+   ```bash
+   start ./TestResults/coveragereport/index.html  # Windows
+   ```
+4. **Coverage Requirements** - Ensure minimum 85% code coverage for new code, 90% for critical authentication components
+5. **Build Verification** - Ensure code compiles successfully in Release mode
+   ```bash
+   dotnet build -c Release
+   ```
+6. **Commit Changes** - Make a single, atomic commit for the completed task with coverage results
+7. **Push Branch** - Push the feature branch to remote repository
    ```bash
    git push -u origin feature/task-name
    ```
-4. **Merge to Main** - Merge the feature branch back to main (or create PR if using pull request workflow)
-5. **Clean Up** - Delete the feature branch locally and remotely after successful merge
+8. **Merge to Main** - Merge the feature branch back to main (or create PR if using pull request workflow)
+9. **Clean Up** - Delete the feature branch locally and remotely after successful merge
 
 ### Branch Naming Conventions
 - `feature/milestone-1-project-setup` - For milestone tasks
