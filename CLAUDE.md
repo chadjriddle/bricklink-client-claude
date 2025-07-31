@@ -231,12 +231,16 @@ When working on tasks from `docs/tasks.md`, follow this strict workflow:
    ```bash
    dotnet build -c Release
    ```
-6. **Commit Changes** - Make a single, atomic commit for the completed task with coverage results
-7. **Push Branch** - Push the feature branch to remote repository
+6. **Update Task Documentation** - Mark the completed task in `docs/tasks.md` with a checkbox ✅
+   ```markdown
+   - [x] 1.1 Basic Project Creation - Create .NET solution and projects
+   ```
+7. **Commit Changes** - Make a single, atomic commit for the completed task with coverage results
+8. **Push Branch** - Push the feature branch to remote repository
    ```bash
    git push -u origin feature/task-name
    ```
-8. **Create Pull Request** - Create a PR from the feature branch to main
+9. **Create Pull Request** - Create a PR from the feature branch to main
    ```bash
    gh pr create --title "feat: [Task Description]" --body "Completes task: [task description]
 
@@ -257,8 +261,8 @@ When working on tasks from `docs/tasks.md`, follow this strict workflow:
    - [ ] No breaking changes (or documented if necessary)
    "
    ```
-9. **PR Review Process** - Wait for approval before merging
-10. **Clean Up** - After PR is merged, delete the feature branch locally and remotely
+10. **PR Review Process** - Wait for approval before merging
+11. **Clean Up** - After PR is merged, delete the feature branch locally and remotely
 
 ### Branch Naming Conventions
 - `feature/milestone-1-project-setup` - For milestone tasks
