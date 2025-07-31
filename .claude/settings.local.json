@@ -21,7 +21,8 @@
       "Bash(dotnet build)",
       "Bash(dotnet test:*)",
       "Bash(dotnet add:*)",
-      "Bash(dotnet build:*)"
+      "Bash(dotnet build:*)",
+      "Bash(mkdir:*)"
     ],
     "deny": []
   }
