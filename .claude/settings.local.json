@@ -25,7 +25,9 @@
       "Bash(mkdir:*)",
       "Bash(git stash:*)",
       "Bash(git config:*)",
-      "Bash(dotnet format:*)"
+      "Bash(dotnet format:*)",
+      "Bash(cat:*)",
+      "Bash(rm:*)"
     ],
     "deny": []
   }
