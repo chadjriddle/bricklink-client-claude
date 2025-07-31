@@ -157,7 +157,7 @@ jobs:
           -verbosity:Info
         
         # Parse coverage percentage from JSON summary
-        COVERAGE=$(cat ./coverage-check/Summary.json | grep -o '"linecoverage":"[0-9.]*"' | grep -o '[0-9.]*')
+        COVERAGE=$(cat ./coverage-check/Summary.json | grep -o '"linecoverage": [0-9.]*' | grep -o '[0-9.]*')
         echo "Current coverage: ${COVERAGE}%"
         
         # Check minimum thresholds
