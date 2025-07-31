@@ -29,7 +29,8 @@
       "Bash(cat:*)",
       "Bash(rm:*)",
       "Bash(dotnet tool install:*)",
-      "Bash(start ./TestResults/coveragereport/index.html)"
+      "Bash(start ./TestResults/coveragereport/index.html)",
+      "WebFetch(domain:github.com)"
     ],
     "deny": []
   }

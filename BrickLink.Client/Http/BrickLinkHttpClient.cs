@@ -116,11 +116,16 @@ public sealed class BrickLinkHttpClient : IDisposable
     /// <param name="cancellationToken">A cancellation token to cancel operation.</param>
     /// <returns>The task object representing the asynchronous operation.</returns>
     /// <exception cref="ArgumentNullException">Thrown when requestUri is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when requestUri is empty or consists only of whitespace.</exception>
     public Task<HttpResponseMessage> GetAsync(string requestUri, CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrEmpty(requestUri))
+        if (requestUri is null)
         {
             throw new ArgumentNullException(nameof(requestUri));
+        }
+        if (string.IsNullOrWhiteSpace(requestUri))
+        {
+            throw new ArgumentException("The request URI cannot be empty or consist only of whitespace.", nameof(requestUri));
         }
 
         return _httpClient.GetAsync(requestUri, cancellationToken);
@@ -151,11 +156,16 @@ public sealed class BrickLinkHttpClient : IDisposable
     /// <param name="cancellationToken">A cancellation token to cancel operation.</param>
     /// <returns>The task object representing the asynchronous operation.</returns>
     /// <exception cref="ArgumentNullException">Thrown when requestUri is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when requestUri is empty or consists only of whitespace.</exception>
     public Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent? content, CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrEmpty(requestUri))
+        if (requestUri is null)
         {
             throw new ArgumentNullException(nameof(requestUri));
+        }
+        if (string.IsNullOrWhiteSpace(requestUri))
+        {
+            throw new ArgumentException("The request URI cannot be empty or consist only of whitespace.", nameof(requestUri));
         }
 
         return _httpClient.PostAsync(requestUri, content, cancellationToken);
@@ -187,11 +197,16 @@ public sealed class BrickLinkHttpClient : IDisposable
     /// <param name="cancellationToken">A cancellation token to cancel operation.</param>
     /// <returns>The task object representing the asynchronous operation.</returns>
     /// <exception cref="ArgumentNullException">Thrown when requestUri is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when requestUri is empty or consists only of whitespace.</exception>
     public Task<HttpResponseMessage> PutAsync(string requestUri, HttpContent? content, CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrEmpty(requestUri))
+        if (requestUri is null)
         {
             throw new ArgumentNullException(nameof(requestUri));
+        }
+        if (string.IsNullOrWhiteSpace(requestUri))
+        {
+            throw new ArgumentException("The request URI cannot be empty or consist only of whitespace.", nameof(requestUri));
         }
 
         return _httpClient.PutAsync(requestUri, content, cancellationToken);
@@ -222,11 +237,16 @@ public sealed class BrickLinkHttpClient : IDisposable
     /// <param name="cancellationToken">A cancellation token to cancel operation.</param>
     /// <returns>The task object representing the asynchronous operation.</returns>
     /// <exception cref="ArgumentNullException">Thrown when requestUri is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when requestUri is empty or consists only of whitespace.</exception>
     public Task<HttpResponseMessage> DeleteAsync(string requestUri, CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrEmpty(requestUri))
+        if (requestUri is null)
         {
             throw new ArgumentNullException(nameof(requestUri));
+        }
+        if (string.IsNullOrWhiteSpace(requestUri))
+        {
+            throw new ArgumentException("The request URI cannot be empty or consist only of whitespace.", nameof(requestUri));
         }
 
         return _httpClient.DeleteAsync(requestUri, cancellationToken);

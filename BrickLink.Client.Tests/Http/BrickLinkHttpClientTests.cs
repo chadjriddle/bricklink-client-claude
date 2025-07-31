@@ -186,10 +186,21 @@ public class BrickLinkHttpClientTests : IDisposable
     }
 
     [Fact]
-    public async Task GetAsync_WithEmptyStringUri_ThrowsArgumentNullException()
+    public async Task GetAsync_WithEmptyStringUri_ThrowsArgumentException()
     {
         // Act & Assert
-        await Assert.ThrowsAsync<ArgumentNullException>(() => _brickLinkClient.GetAsync(string.Empty));
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => _brickLinkClient.GetAsync(string.Empty));
+        Assert.Equal("requestUri", exception.ParamName);
+        Assert.Contains("empty or consist only of whitespace", exception.Message);
+    }
+
+    [Fact]
+    public async Task GetAsync_WithWhitespaceStringUri_ThrowsArgumentException()
+    {
+        // Act & Assert
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => _brickLinkClient.GetAsync("   "));
+        Assert.Equal("requestUri", exception.ParamName);
+        Assert.Contains("empty or consist only of whitespace", exception.Message);
     }
 
     [Fact]
@@ -243,6 +254,15 @@ public class BrickLinkHttpClientTests : IDisposable
     }
 
     [Fact]
+    public async Task PostAsync_WithEmptyStringUri_ThrowsArgumentException()
+    {
+        // Act & Assert
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => _brickLinkClient.PostAsync(string.Empty, null));
+        Assert.Equal("requestUri", exception.ParamName);
+        Assert.Contains("empty or consist only of whitespace", exception.Message);
+    }
+
+    [Fact]
     public async Task PostAsync_WithNullUri_ThrowsArgumentNullException()
     {
         // Act & Assert
@@ -293,6 +313,15 @@ public class BrickLinkHttpClientTests : IDisposable
     }
 
     [Fact]
+    public async Task PutAsync_WithEmptyStringUri_ThrowsArgumentException()
+    {
+        // Act & Assert
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => _brickLinkClient.PutAsync(string.Empty, null));
+        Assert.Equal("requestUri", exception.ParamName);
+        Assert.Contains("empty or consist only of whitespace", exception.Message);
+    }
+
+    [Fact]
     public async Task PutAsync_WithNullUri_ThrowsArgumentNullException()
     {
         // Act & Assert
@@ -338,6 +367,15 @@ public class BrickLinkHttpClientTests : IDisposable
     {
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentNullException>(() => _brickLinkClient.DeleteAsync((string)null!));
+    }
+
+    [Fact]
+    public async Task DeleteAsync_WithEmptyStringUri_ThrowsArgumentException()
+    {
+        // Act & Assert
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => _brickLinkClient.DeleteAsync(string.Empty));
+        Assert.Equal("requestUri", exception.ParamName);
+        Assert.Contains("empty or consist only of whitespace", exception.Message);
     }
 
     [Fact]
