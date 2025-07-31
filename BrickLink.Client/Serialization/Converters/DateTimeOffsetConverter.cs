@@ -45,16 +45,18 @@ public class DateTimeOffsetConverter : JsonConverter<DateTimeOffset>
             // Try parsing with supported formats
             foreach (var format in SupportedFormats)
             {
-                if (DateTimeOffset.TryParseExact(stringValue, format, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var result))
+                // BrickLink legacy format and formats with Z should be treated as UTC
+                var dateTimeStyles = (format.EndsWith("Z") || format == "yyyy-MM-dd HH:mm:ss") ? DateTimeStyles.AssumeUniversal : DateTimeStyles.None;
+                if (DateTimeOffset.TryParseExact(stringValue, format, CultureInfo.InvariantCulture, dateTimeStyles, out var result))
                 {
-                    return result.ToUniversalTime();
+                    return dateTimeStyles == DateTimeStyles.AssumeUniversal ? result.ToUniversalTime() : result;
                 }
             }
 
             // Try standard parsing as fallback
-            if (DateTimeOffset.TryParse(stringValue, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var fallbackResult))
+            if (DateTimeOffset.TryParse(stringValue, CultureInfo.InvariantCulture, DateTimeStyles.None, out var fallbackResult))
             {
-                return fallbackResult.ToUniversalTime();
+                return fallbackResult;
             }
 
             throw new JsonException($"Unable to convert '{stringValue}' to DateTimeOffset. Supported formats: {string.Join(", ", SupportedFormats)}");

@@ -219,10 +219,10 @@ public class JsonSerializationHelperTests
     public void RoundTrip_WithComplexObject_ShouldMaintainData()
     {
         // Arrange
-        var originalData = new TestData 
-        { 
-            Id = 42, 
-            Name = "Test with special chars: åäö", 
+        var originalData = new TestData
+        {
+            Id = 42,
+            Name = "Test with special chars: åäö",
             Value = 123.4567m,
             CreatedAt = new DateTimeOffset(2023, 12, 25, 15, 30, 45, 123, TimeSpan.Zero) // Use fixed timestamp
         };

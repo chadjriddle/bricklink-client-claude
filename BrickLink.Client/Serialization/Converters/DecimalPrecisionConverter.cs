@@ -12,7 +12,7 @@ namespace BrickLink.Client.Serialization.Converters;
 public class DecimalPrecisionConverter : JsonConverter<decimal>
 {
     private const int DefaultPrecision = 4; // Support up to 4 decimal places for currency
-    
+
     /// <summary>
     /// Reads and converts JSON to a decimal value with proper precision handling.
     /// </summary>
@@ -31,41 +31,28 @@ public class DecimalPrecisionConverter : JsonConverter<decimal>
                     // Round to maintain precision and avoid floating point artifacts
                     return Math.Round(decimalValue, DefaultPrecision, MidpointRounding.AwayFromZero);
                 }
-                
-                // Fallback to double conversion if decimal parsing fails
-                if (reader.TryGetDouble(out var doubleValue))
-                {
-                    try
-                    {
-                        var convertedValue = Convert.ToDecimal(doubleValue);
-                        return Math.Round(convertedValue, DefaultPrecision, MidpointRounding.AwayFromZero);
-                    }
-                    catch (OverflowException ex)
-                    {
-                        throw new JsonException($"Numeric value {doubleValue} is too large or small for decimal conversion.", ex);
-                    }
-                }
-                
-                throw new JsonException($"Unable to convert numeric value to decimal.");
-            
+
+                // Throw an exception if decimal parsing fails
+                throw new JsonException($"Unable to convert numeric value to decimal. Ensure the value is a valid decimal representation.");
+
             case JsonTokenType.String:
                 var stringValue = reader.GetString();
                 if (string.IsNullOrEmpty(stringValue))
                 {
                     throw new JsonException("Cannot convert null or empty string to decimal.");
                 }
-                
+
                 // Handle string representations of numbers (some APIs may return prices as strings)
                 if (decimal.TryParse(stringValue, NumberStyles.Number, CultureInfo.InvariantCulture, out var parsedDecimal))
                 {
                     return Math.Round(parsedDecimal, DefaultPrecision, MidpointRounding.AwayFromZero);
                 }
-                
+
                 throw new JsonException($"Unable to convert string '{stringValue}' to decimal.");
-            
+
             case JsonTokenType.Null:
                 throw new JsonException("Cannot convert null value to decimal.");
-            
+
             default:
                 throw new JsonException($"Unexpected token type {reader.TokenType} when parsing decimal.");
         }
@@ -91,7 +78,7 @@ public class DecimalPrecisionConverter : JsonConverter<decimal>
 public class NullableDecimalPrecisionConverter : JsonConverter<decimal?>
 {
     private readonly DecimalPrecisionConverter _baseConverter = new();
-    
+
     /// <summary>
     /// Reads and converts JSON to a nullable decimal value.
     /// </summary>
@@ -105,7 +92,7 @@ public class NullableDecimalPrecisionConverter : JsonConverter<decimal?>
         {
             return null;
         }
-        
+
         return _baseConverter.Read(ref reader, typeof(decimal), options);
     }
 

@@ -20,22 +20,22 @@ public static class JsonSerializerOptionsFactory
         {
             // Use camelCase property names to match API conventions
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            
+
             // Allow reading from case-insensitive property names for flexibility
             PropertyNameCaseInsensitive = true,
-            
+
             // Pretty print for debugging (will be overridden in production)
             WriteIndented = false,
-            
+
             // Handle null values appropriately
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-            
+
             // Allow trailing commas in JSON for robustness
             AllowTrailingCommas = true,
-            
+
             // Allow comments in JSON for configuration files
             ReadCommentHandling = JsonCommentHandling.Skip,
-            
+
             // Use string enum conversion for better readability
             Converters =
             {
@@ -47,7 +47,7 @@ public static class JsonSerializerOptionsFactory
 
         return options;
     }
-    
+
     /// <summary>
     /// Creates a JsonSerializerOptions instance configured for debugging with indented output.
     /// </summary>
@@ -58,7 +58,7 @@ public static class JsonSerializerOptionsFactory
         options.WriteIndented = true;
         return options;
     }
-    
+
     /// <summary>
     /// Creates a JsonSerializerOptions instance configured for production with minimal output.
     /// </summary>

@@ -9,25 +9,25 @@ namespace BrickLink.Client.Serialization;
 /// </summary>
 public static class JsonSerializationHelper
 {
-    private static readonly Lazy<JsonSerializerOptions> _defaultOptions = 
+    private static readonly Lazy<JsonSerializerOptions> _defaultOptions =
         new(() => JsonSerializerOptionsFactory.CreateOptions());
-    
-    private static readonly Lazy<JsonSerializerOptions> _debugOptions = 
+
+    private static readonly Lazy<JsonSerializerOptions> _debugOptions =
         new(() => JsonSerializerOptionsFactory.CreateDebugOptions());
-    
-    private static readonly Lazy<JsonSerializerOptions> _productionOptions = 
+
+    private static readonly Lazy<JsonSerializerOptions> _productionOptions =
         new(() => JsonSerializerOptionsFactory.CreateProductionOptions());
 
     /// <summary>
     /// Gets the default JsonSerializerOptions instance for BrickLink API operations.
     /// </summary>
     public static JsonSerializerOptions DefaultOptions => _defaultOptions.Value;
-    
+
     /// <summary>
     /// Gets the debug JsonSerializerOptions instance with indented formatting.
     /// </summary>
     public static JsonSerializerOptions DebugOptions => _debugOptions.Value;
-    
+
     /// <summary>
     /// Gets the production JsonSerializerOptions instance optimized for performance.
     /// </summary>
@@ -72,11 +72,11 @@ public static class JsonSerializationHelper
         try
         {
             var result = JsonSerializer.Deserialize<T>(json, options ?? DefaultOptions);
-            if (result == null)
+            if (!typeof(T).IsValueType && result == null)
             {
                 throw new JsonException($"Deserialization resulted in null value for type {typeof(T).Name}.");
             }
-            return result;
+            return result!;
         }
         catch (Exception ex) when (ex is not JsonException && ex is not ArgumentException)
         {

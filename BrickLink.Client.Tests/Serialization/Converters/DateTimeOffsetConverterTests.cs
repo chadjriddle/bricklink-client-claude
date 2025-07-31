@@ -134,7 +134,7 @@ public class DateTimeOffsetConverterTests
     {
         // Arrange
         var originalJson = $"\"{inputFormat}\"";
-        
+
         // Act
         var deserialized = JsonSerializer.Deserialize<DateTimeOffset>(originalJson, _options);
         var serialized = JsonSerializer.Serialize(deserialized, _options);

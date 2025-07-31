@@ -353,6 +353,11 @@ This project uses a **mandatory PR workflow** - direct commits to main are not a
 - Use descriptive commit messages that explain the "why" not just the "what"
 - Follow conventional commit format: `feat:`, `fix:`, `docs:`, `test:`, `refactor:`
 
+## Post-Development Workflow
+
+### Final Task Completion Steps
+- Ensure that `tasks.md` is updated before finishing and committing changes
+
 ## Documentation
 
 See `docs/tasks.md` for detailed project milestones and task breakdown.
