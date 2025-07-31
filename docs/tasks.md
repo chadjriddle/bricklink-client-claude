@@ -34,6 +34,13 @@ This document outlines the high-level milestones and individual tasks required t
 - [ ] Define IAuthenticationHandler interface
 - [ ] Define IApiService base interface for service contracts
 
+### 1.5 CI/CD and Coverage Integration
+- [ ] Create GitHub Actions workflow for CI/CD
+- [ ] Configure automated testing on feature branches and main
+- [ ] Set up Codecov integration for coverage reporting
+- [ ] Configure coverage thresholds and PR status checks
+- [ ] Add workflow badges to README.md
+
 ## Milestone 2: Core Infrastructure
 
 ### 2.1 API Response Models

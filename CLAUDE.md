@@ -99,10 +99,12 @@ reportgenerator -help
 ### Coverage Workflow Integration
 Every task completion must include:
 1. Running tests with coverage collection
-2. Generating HTML coverage report
+2. Generating HTML coverage report (for local development)
 3. Reviewing coverage metrics in browser
 4. Meeting minimum coverage thresholds before commit
 5. Including coverage summary in commit message when relevant
+
+**Note**: GitHub Actions CI/CD pipeline uses Codecov for automated coverage reporting and PR status checks. Local HTML reports are for development verification only.
 
 ### Coverage Report Structure
 - **Line Coverage**: Percentage of executed code lines
