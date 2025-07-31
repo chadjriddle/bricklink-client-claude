@@ -4,6 +4,36 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    
+    <!-- Package Metadata -->
+    <PackageId>BrickLink.Client</PackageId>
+    <Title>BrickLink API Client for .NET</Title>
+    <Description>A modern, strongly-typed C# client library for the BrickLink API, built on .NET 9.0. Provides easy access to catalog information about LEGO parts, sets, and minifigures with automatic OAuth 1.0a-like authentication.</Description>
+    <Version>0.1.0-alpha</Version>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+    
+    <!-- Author and Repository Information -->
+    <Authors>Chad Riddle</Authors>
+    <Company>Chad Riddle</Company>
+    <Copyright>© 2025 Chad Riddle. All rights reserved.</Copyright>
+    <PackageProjectUrl>https://github.com/chadjriddle/bricklink-client-claude</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/chadjriddle/bricklink-client-claude</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    
+    <!-- Package Classification -->
+    <PackageTags>bricklink;lego;api;client;oauth;catalog;parts;sets;minifigures</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    
+    <!-- Documentation -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="System.Text.Json" Version="9.0.7" />
+  </ItemGroup>
 
 </Project>
