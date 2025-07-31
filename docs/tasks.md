@@ -10,48 +10,99 @@ This document outlines the high-level milestones and individual tasks required t
 
 ## Milestone 1: Project Foundation & Structure
 
-### 1.1 Project Setup
-- [ ] Create .NET 9.0 class library project structure
-- [ ] Configure project file with appropriate package metadata
-- [ ] Set up solution structure with test project
-- [ ] Configure EditorConfig and code style settings
-- [ ] Add necessary NuGet package references (System.Text.Json, System.Net.Http)
+### 1.1 Basic Project Creation
+- [ ] Create .NET 9.0 class library project
+- [ ] Create xUnit test project
+- [ ] Create solution file linking both projects
 
-### 1.2 Namespace & Architecture Design
-- [ ] Define namespace structure (BrickLink.Client, BrickLink.Client.Auth, BrickLink.Client.Models, BrickLink.Client.Enums)
-- [ ] Create base project structure with appropriate folders
-- [ ] Define architectural interfaces and contracts
+### 1.2 Project Configuration
+- [ ] Configure main project file with package metadata (name, description, version)
+- [ ] Add System.Text.Json NuGet package reference
+- [ ] Add System.Net.Http NuGet package reference
+- [ ] Configure EditorConfig for C# formatting rules
+- [ ] Add code style settings (.editorconfig)
+
+### 1.3 Project Structure Setup
+- [ ] Create BrickLink.Client root namespace folder
+- [ ] Create BrickLink.Client.Auth namespace folder
+- [ ] Create BrickLink.Client.Models namespace folder
+- [ ] Create BrickLink.Client.Enums namespace folder
+- [ ] Create BrickLink.Client.Services namespace folder
+
+### 1.4 Architecture Contracts
+- [ ] Define IApiClient interface for main client contract
+- [ ] Define IAuthenticationHandler interface
+- [ ] Define IApiService base interface for service contracts
 
 ## Milestone 2: Core Infrastructure
 
-### 2.1 Response Handling Framework
+### 2.1 API Response Models
 - [ ] Implement `ApiResponse<T>` generic wrapper class
 - [ ] Implement `Meta` model for response metadata
-- [ ] Create `BrickLinkApiException` for error handling
-- [ ] Implement JSON serialization/deserialization with System.Text.Json
-- [ ] Add proper DateTimeOffset and decimal handling for API requirements
+- [ ] Add JSON property attributes for serialization
 
-### 2.2 HTTP Client Foundation
-- [ ] Create base HTTP client wrapper
-- [ ] Implement retry logic and error handling
-- [ ] Add request/response logging capabilities
-- [ ] Configure proper SSL/TLS and UTF-8 encoding
+### 2.2 Exception Handling
+- [ ] Create `BrickLinkApiException` base exception class
+- [ ] Add properties for status code, message, and description
+- [ ] Implement exception factory methods for different error types
+
+### 2.3 JSON Serialization Setup
+- [ ] Configure JsonSerializerOptions for API requirements
+- [ ] Add custom JsonConverter for DateTimeOffset handling
+- [ ] Add custom JsonConverter for decimal precision handling
+- [ ] Create serialization helper class
+
+### 2.4 HTTP Client Wrapper
+- [ ] Create base HttpClient wrapper class
+- [ ] Configure SSL/TLS and UTF-8 encoding
+- [ ] Add base URL configuration
+
+### 2.5 Retry Logic Implementation
+- [ ] Implement retry policy for transient failures
+- [ ] Add exponential backoff strategy
+- [ ] Configure retry limits and timeout handling
+
+### 2.6 Request/Response Logging
+- [ ] Create logging interfaces and abstractions
+- [ ] Implement request logging functionality
+- [ ] Implement response logging functionality
 
 ## Milestone 3: Authentication System
 
-### 3.1 OAuth 1.0a-like Authentication Handler
-- [ ] Implement `AuthenticationHandler` inheriting from `DelegatingHandler`
-- [ ] Create credential management (ConsumerKey, ConsumerSecret, Token, TokenSecret)
-- [ ] Implement signature generation logic (HMAC-SHA1)
-- [ ] Add parameter collection and normalization (RFC3986 encoding)
-- [ ] Implement signature base string construction
-- [ ] Add nonce and timestamp generation
-- [ ] Create Authorization header construction
+### 3.1 Credential Management
+- [ ] Create `BrickLinkCredentials` class with required properties
+- [ ] Add validation for required credential fields
+- [ ] Implement secure string handling for secrets
 
-### 3.2 Authentication Integration
-- [ ] Integrate authentication handler into HttpClient pipeline
-- [ ] Add authentication testing utilities
-- [ ] Implement secure credential storage patterns
+### 3.2 OAuth Parameter Generation
+- [ ] Implement nonce generation utility
+- [ ] Implement timestamp generation utility
+- [ ] Create OAuth parameter collection class
+
+### 3.3 String Encoding and Normalization
+- [ ] Implement RFC3986 percent encoding utility
+- [ ] Create parameter normalization methods
+- [ ] Add parameter sorting functionality
+
+### 3.4 Signature Generation
+- [ ] Implement signature base string construction
+- [ ] Create HMAC-SHA1 signature generation
+- [ ] Add signature key construction logic
+
+### 3.5 Authorization Header Construction
+- [ ] Create Authorization header string builder
+- [ ] Implement OAuth parameter formatting
+- [ ] Add header validation
+
+### 3.6 Authentication Handler
+- [ ] Implement `AuthenticationHandler` inheriting from `DelegatingHandler`
+- [ ] Integrate all authentication components
+- [ ] Add request interception and modification
+
+### 3.7 Authentication Integration
+- [ ] Create HttpClient factory with authentication
+- [ ] Add authentication handler to client pipeline
+- [ ] Implement credential injection patterns
 
 ## Milestone 4: Data Models
 
@@ -79,84 +130,161 @@ This document outlines the high-level milestones and individual tasks required t
 
 ## Milestone 5: Core Client Implementation
 
-### 5.1 Main Client Class
-- [ ] Implement `BrickLinkClient` main class
-- [ ] Add constructor with credential parameters
-- [ ] Configure HttpClient with authentication handler
-- [ ] Implement resource-specific property accessors
+### 5.1 Base Service Architecture
+- [ ] Create `BaseApiService` abstract class
+- [ ] Add HttpClient dependency injection
+- [ ] Implement base URL construction
 
-### 5.2 Base Service Classes
-- [ ] Create base service class for common API operations
-- [ ] Implement generic GET, POST, PUT, DELETE methods
-- [ ] Add parameter serialization helpers
-- [ ] Implement response deserialization with error handling
+### 5.2 HTTP Method Implementations
+- [ ] Implement generic GET method with response handling
+- [ ] Implement generic POST method with request/response handling
+- [ ] Implement generic PUT method with request/response handling
+- [ ] Implement generic DELETE method with response handling
+
+### 5.3 Parameter and Response Handling
+- [ ] Create query parameter serialization helpers
+- [ ] Implement request body serialization
+- [ ] Add response deserialization with error checking
+- [ ] Create response validation and exception throwing
+
+### 5.4 Main Client Class Structure
+- [ ] Create `BrickLinkClient` class with credential constructor
+- [ ] Configure HttpClient with authentication handler
+- [ ] Add client disposal pattern implementation
+
+### 5.5 Service Property Accessors
+- [ ] Add ICatalogService property accessor
+- [ ] Add IColorService property accessor  
+- [ ] Add ICategoryService property accessor
+- [ ] Add IItemMappingService property accessor
 
 ## Milestone 6: Catalog Services (MVP Core)
 
-### 6.1 Item Catalog Service
-- [ ] Implement `ICatalogService` interface
-- [ ] `GetItemAsync(ItemType type, string itemNo)` - Get specific item details
-- [ ] `GetItemImageAsync(ItemType type, string itemNo, int colorId)` - Get item image URLs
-- [ ] `GetItemColorsAsync(ItemType type, string itemNo)` - Get known colors for item
+### 6.1 Catalog Service Interface
+- [ ] Define `ICatalogService` interface with method signatures
+- [ ] Create `CatalogService` class inheriting from `BaseApiService`
 
-### 6.2 Set and Part Information Services
-- [ ] `GetSupersetsAsync(ItemType type, string itemNo, int? colorId)` - Get sets containing item
-- [ ] `GetSubsetsAsync(ItemType type, string itemNo, bool? includeBox, bool? includeInstructions)` - Get set contents
-- [ ] `GetPriceGuideAsync(ItemType type, string itemNo, int? colorId, string guideType, NewOrUsed? condition)` - Get pricing data
+### 6.2 Basic Item Operations
+- [ ] Implement `GetItemAsync(ItemType type, string itemNo)` method
+- [ ] Implement `GetItemImageAsync(ItemType type, string itemNo, int colorId)` method
+- [ ] Implement `GetItemColorsAsync(ItemType type, string itemNo)` method
 
-### 6.3 Reference Data Services
-- [ ] `GetColorsAsync()` - Get all available colors
-- [ ] `GetColorAsync(int colorId)` - Get specific color details
-- [ ] `GetCategoriesAsync()` - Get all item categories
-- [ ] `GetCategoryAsync(int categoryId)` - Get specific category
+### 6.3 Set Relationship Operations
+- [ ] Implement `GetSupersetsAsync(ItemType type, string itemNo, int? colorId)` method
+- [ ] Implement `GetSubsetsAsync(ItemType type, string itemNo, bool? includeBox, bool? includeInstructions)` method
 
-### 6.4 Item Mapping Service
-- [ ] `GetElementIdAsync(string partNo, int? colorId)` - Convert BrickLink to LEGO Element ID
-- [ ] `GetItemNumberAsync(string elementId)` - Convert LEGO Element ID to BrickLink
+### 6.4 Price Guide Operations
+- [ ] Implement `GetPriceGuideAsync(ItemType type, string itemNo, int? colorId, string guideType, NewOrUsed? condition)` method
+
+### 6.5 Color Service Implementation
+- [ ] Define `IColorService` interface
+- [ ] Create `ColorService` class inheriting from `BaseApiService`
+- [ ] Implement `GetColorsAsync()` method
+- [ ] Implement `GetColorAsync(int colorId)` method
+
+### 6.6 Category Service Implementation
+- [ ] Define `ICategoryService` interface
+- [ ] Create `CategoryService` class inheriting from `BaseApiService`
+- [ ] Implement `GetCategoriesAsync()` method
+- [ ] Implement `GetCategoryAsync(int categoryId)` method
+
+### 6.7 Item Mapping Service Implementation
+- [ ] Define `IItemMappingService` interface
+- [ ] Create `ItemMappingService` class inheriting from `BaseApiService`
+- [ ] Implement `GetElementIdAsync(string partNo, int? colorId)` method
+- [ ] Implement `GetItemNumberAsync(string elementId)` method
 
 ## Milestone 7: Consumer Pattern Implementation
 
-### 7.1 Fluent API Design
-- [ ] Design fluent interface for common operations
-- [ ] Implement method chaining for filtering and querying
-- [ ] Add builder patterns for complex queries
+### 7.1 Query Builder Interfaces
+- [ ] Create `ICatalogQueryBuilder` interface for fluent catalog queries
+- [ ] Create `IPriceGuideQueryBuilder` interface for price guide queries
+- [ ] Define builder method signatures for common operations
 
-### 7.2 Caching Strategy
-- [ ] Implement memory caching for reference data (colors, categories)
-- [ ] Add cache invalidation and expiration policies
-- [ ] Optimize for frequently accessed catalog data
+### 7.2 Query Builder Implementations
+- [ ] Implement `CatalogQueryBuilder` with method chaining
+- [ ] Implement `PriceGuideQueryBuilder` with filtering options
+- [ ] Add query execution methods that return results
+
+### 7.3 Caching Infrastructure
+- [ ] Create `IApiCache` interface for caching abstraction
+- [ ] Implement `MemoryApiCache` using IMemoryCache
+- [ ] Add cache key generation utilities
+
+### 7.4 Caching Integration
+- [ ] Add caching to color service methods
+- [ ] Add caching to category service methods  
+- [ ] Implement cache invalidation strategies
+- [ ] Configure cache expiration policies
 
 ## Milestone 8: Testing & Documentation
 
-### 8.1 Unit Testing
-- [ ] Create comprehensive unit tests for authentication
-- [ ] Test all model serialization/deserialization
-- [ ] Mock HTTP responses for API endpoint testing
+### 8.1 Authentication Unit Tests
+- [ ] Test OAuth signature generation with known values
+- [ ] Test parameter normalization and encoding
+- [ ] Test nonce and timestamp generation
+- [ ] Test credential validation
+
+### 8.2 Model Serialization Tests
+- [ ] Test ApiResponse<T> serialization/deserialization
+- [ ] Test all model classes with JSON samples
+- [ ] Test DateTimeOffset and decimal handling
+- [ ] Test enum serialization with string values
+
+### 8.3 Service Unit Tests
+- [ ] Create mock HTTP responses for each service method
+- [ ] Test catalog service methods with mocked responses
+- [ ] Test color and category service methods
 - [ ] Test error handling and exception scenarios
 
-### 8.2 Integration Testing
-- [ ] Create integration tests with actual API (using test credentials)
-- [ ] Test rate limiting and retry logic
-- [ ] Validate authentication flow end-to-end
+### 8.4 Integration Test Setup
+- [ ] Create integration test project structure
+- [ ] Set up test credentials configuration
+- [ ] Create test data fixtures and helpers
 
-### 8.3 Documentation
-- [ ] Create comprehensive XML documentation for all public APIs
-- [ ] Write README with getting started guide
-- [ ] Add code examples for common use cases
+### 8.5 Integration Test Implementation
+- [ ] Test authentication flow end-to-end with real API
+- [ ] Test basic catalog operations against live API
+- [ ] Test rate limiting and retry logic
+- [ ] Validate error handling with actual API errors
+
+### 8.6 API Documentation
+- [ ] Add XML documentation to all public interfaces
+- [ ] Add XML documentation to all public classes
+- [ ] Add XML documentation to all public methods
+- [ ] Add parameter and return value documentation
+
+### 8.7 Usage Documentation
+- [ ] Update README with installation instructions
+- [ ] Add getting started guide with code examples
 - [ ] Document authentication setup process
+- [ ] Add troubleshooting section for common issues
 
 ## Milestone 9: Packaging & Distribution
 
-### 9.1 NuGet Package Preparation
-- [ ] Configure NuGet package metadata
-- [ ] Create package icon and documentation
-- [ ] Set up semantic versioning
-- [ ] Add license and attribution information
+### 9.1 NuGet Package Metadata
+- [ ] Configure package ID, title, and description in project file
+- [ ] Add author, copyright, and repository information
+- [ ] Set up semantic versioning with initial version
+- [ ] Add package tags and categories
 
-### 9.2 Build & CI Setup
-- [ ] Configure build pipeline
-- [ ] Add automated testing in CI
-- [ ] Set up package publishing workflow
+### 9.2 Package Assets
+- [ ] Create package icon (64x64 PNG)
+- [ ] Add README.md to package
+- [ ] Include LICENSE file in package
+- [ ] Add release notes template
+
+### 9.3 Build Configuration
+- [ ] Configure Release build configuration
+- [ ] Set up XML documentation generation
+- [ ] Configure assembly signing (if needed)
+- [ ] Add package validation rules
+
+### 9.4 CI/CD Pipeline Setup
+- [ ] Create GitHub Actions workflow file
+- [ ] Add automated build on push/PR
+- [ ] Configure automated test execution
+- [ ] Set up NuGet package publishing on release tags
 
 ## MVP Acceptance Criteria
 
