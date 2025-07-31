@@ -1,32 +1,56 @@
-# /next-task
+---
+description: Automatically determines and continues with the next pending task from the project's task list in docs/tasks.md
+allowed-tools:
+  - Bash
+  - Read
+  - Write
+  - Edit
+  - MultiEdit
+  - Grep
+  - Glob
+  - LS
+  - TodoWrite
+  - Task
+argument-hint: "(no arguments required)"
+---
 
-Automatically determines and continues with the next pending task from the project's task list.
+# Continue Next Task
 
-## What this command does:
+This command will:
 
-1. **Reads Task List**: Analyzes `docs/tasks.md` to understand current project status
-2. **Identifies Next Task**: Finds the first uncompleted task in the milestone sequence
-3. **Creates Todo List**: Sets up structured task tracking using TodoWrite
-4. **Begins Implementation**: Starts working on the identified task following project conventions
-5. **Follows Workflow**: Adheres to branch creation, testing, and PR requirements from CLAUDE.md
+1. **Analyze Task List** by:
+   - Reading `docs/tasks.md` to understand current project status
+   - Identifying completed vs pending tasks across all milestones
+   - Determining the next logical task in the sequence
+2. **Set Up Task Tracking** by:
+   - Creating comprehensive TodoWrite list for the identified task
+   - Breaking down complex tasks into manageable subtasks
+   - Setting up proper task status tracking
+3. **Create Feature Branch** by:
+   - Following project naming conventions (`feature/milestone-X-task-name`)
+   - Ensuring clean working directory before starting
+   - Creating branch from latest main
+4. **Implement Task** by:
+   - Following Just-In-Time interface creation principles
+   - Implementing with comprehensive unit tests (85%+ coverage, 90%+ for auth)
+   - Adhering to zero-warning build policy
+5. **Complete Workflow** by:
+   - Running full test suite with coverage reports
+   - Verifying formatting and build requirements
+   - Updating task documentation
+   - Creating PR following established templates
 
-## Behavior:
+## Usage Examples:
+- `/next-task` - Finds and begins the next pending task
 
-- Automatically determines the next logical task based on completion status
-- Creates feature branch following naming conventions
-- Sets up comprehensive todo list for task tracking
-- Implements the task with full test coverage
-- Follows zero-warning build policy
-- Generates coverage reports and ensures thresholds are met
-- Updates task documentation upon completion
+## Process:
+The command follows these steps systematically:
+1. Use Read tool to analyze `docs/tasks.md` for current status
+2. Identify the first uncompleted task in milestone order
+3. Use TodoWrite to create structured task tracking
+4. Use Bash to create feature branch following naming conventions
+5. Implement task using appropriate tools (Edit/MultiEdit/Write)
+6. Run comprehensive testing and validation
+7. Update task documentation and create PR
 
-## Project Workflow Integration:
-
-This command fully integrates with the established development workflow:
-- Just-In-Time interface creation principles
-- Atomic development with single responsibility
-- Comprehensive testing with coverage requirements
-- Professional CI/CD integration
-- Mandatory PR workflow compliance
-
-Use this command whenever you want to continue with the next task in the project's roadmap.
+$ARGUMENTS
