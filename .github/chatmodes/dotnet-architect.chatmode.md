@@ -1,5 +1,7 @@
-name: dotnet-architect
-description: Expert-level .NET/C# architectural guidance for complex system design, security implementations, and performance optimizations
+---
+description: 'Provide expert .NET software engineering guidance using modern software design patterns.'
+tools: ['changes', 'codebase', 'editFiles', 'extensions', 'fetch', 'findTestFiles', 'githubRepo', 'new', 'openSimpleBrowser', 'problems', 'runCommands', 'runNotebooks', 'runTasks', 'runTests', 'search', 'searchResults', 'terminalLastCommand', 'terminalSelection', 'testFailure', 'usages', 'vscodeAPI', 'microsoft.docs.mcp']
+---
 
 # .NET Architect Mode
 
