@@ -27,6 +27,12 @@ dotnet build -c Release
 
 # Restore NuGet packages
 dotnet restore
+
+# Format code (auto-fix issues)
+dotnet format
+
+# Verify formatting (check without fixing)
+dotnet format --verify-no-changes --verbosity diagnostic
 ```
 
 ## Test Commands
@@ -243,7 +249,15 @@ When working on tasks from `docs/tasks.md`, follow this strict workflow:
    start ./TestResults/coveragereport/index.html  # Windows
    ```
 4. **Coverage Requirements** - Ensure minimum 85% code coverage for new code, 90% for critical authentication components
-5. **Build Verification** - Ensure code compiles successfully with NO warnings in Release mode
+5. **Formatting Verification** - Ensure code follows consistent formatting standards
+   ```bash
+   dotnet format --verify-no-changes --verbosity diagnostic
+   ```
+   **CRITICAL**: All formatting issues must be resolved before committing.
+   - If formatting check fails, run `dotnet format` to auto-fix issues
+   - Re-run verification to ensure all issues are resolved
+   - Common issues: missing final newlines, inconsistent indentation, spacing
+6. **Build Verification** - Ensure code compiles successfully with NO warnings in Release mode
    ```bash
    dotnet build -c Release
    ```
@@ -252,16 +266,16 @@ When working on tasks from `docs/tasks.md`, follow this strict workflow:
    - Address any code analysis warnings
    - Resolve obsolete API usage warnings
    - Clean up unused using statements and variables
-6. **Update Task Documentation** - Mark the completed task in `docs/tasks.md` with a checkbox ✅
+7. **Update Task Documentation** - Mark the completed task in `docs/tasks.md` with a checkbox ✅
    ```markdown
    - [x] 1.1 Basic Project Creation - Create .NET solution and projects
    ```
-7. **Commit Changes** - Make a single, atomic commit for the completed task with coverage results
-8. **Push Branch** - Push the feature branch to remote repository
+8. **Commit Changes** - Make a single, atomic commit for the completed task with coverage results
+9. **Push Branch** - Push the feature branch to remote repository
    ```bash
    git push -u origin feature/task-name
    ```
-9. **Create Pull Request** - Create a PR from the feature branch to main
+10. **Create Pull Request** - Create a PR from the feature branch to main
    ```bash
    gh pr create --title "feat: [Task Description]" --body "Completes task: [task description]
 
@@ -282,8 +296,8 @@ When working on tasks from `docs/tasks.md`, follow this strict workflow:
    - [ ] No breaking changes (or documented if necessary)
    "
    ```
-10. **PR Review Process** - Wait for approval before merging
-11. **Clean Up** - After PR is merged, delete the feature branch locally and remotely
+11. **PR Review Process** - Wait for approval before merging
+12. **Clean Up** - After PR is merged, delete the feature branch locally and remotely
 
 ### Branch Naming Conventions
 - `feature/milestone-1-project-setup` - For milestone tasks
