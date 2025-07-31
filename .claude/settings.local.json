@@ -30,7 +30,11 @@
       "Bash(rm:*)",
       "Bash(dotnet tool install:*)",
       "Bash(start ./TestResults/coveragereport/index.html)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(del \"C:\\code\\ClaudeCode\\bricklink-client-claude\\BrickLink.Client\\Logging\\HttpLoggingHandlerTests.cs\")",
+      "Bash(powershell:*)",
+      "WebFetch(domain:docs.anthropic.com)",
+      "Bash(start ./TestResults/coveragereport/BrickLink.Client_HttpLoggingHandler.html)"
     ],
     "deny": []
   }
