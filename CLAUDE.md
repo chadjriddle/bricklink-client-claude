@@ -200,8 +200,29 @@ When working on tasks from `docs/tasks.md`, follow this strict workflow:
    ```bash
    git push -u origin feature/task-name
    ```
-8. **Merge to Main** - Merge the feature branch back to main (or create PR if using pull request workflow)
-9. **Clean Up** - Delete the feature branch locally and remotely after successful merge
+8. **Create Pull Request** - Create a PR from the feature branch to main
+   ```bash
+   gh pr create --title "feat: [Task Description]" --body "Completes task: [task description]
+
+   ## Changes Made
+   - [List key changes]
+   - [Include any architectural decisions]
+
+   ## Testing
+   - All tests pass
+   - Coverage: [X]% (meets minimum requirements)
+   - HTML coverage report generated and reviewed
+
+   ## Checklist
+   - [ ] Code follows project conventions
+   - [ ] All tests pass
+   - [ ] Coverage thresholds met
+   - [ ] XML documentation updated
+   - [ ] No breaking changes (or documented if necessary)
+   "
+   ```
+9. **PR Review Process** - Wait for approval before merging
+10. **Clean Up** - After PR is merged, delete the feature branch locally and remotely
 
 ### Branch Naming Conventions
 - `feature/milestone-1-project-setup` - For milestone tasks
@@ -209,11 +230,53 @@ When working on tasks from `docs/tasks.md`, follow this strict workflow:
 - `feature/add-catalog-models` - For model/data structure tasks
 - `hotfix/fix-authentication-bug` - For urgent bug fixes
 
+### Pull Request Workflow
+
+This project uses a **mandatory PR workflow** - direct commits to main are not allowed.
+
+#### PR Requirements
+- **Title Format**: Use conventional commit prefixes: `feat:`, `fix:`, `docs:`, `test:`, `refactor:`
+- **Description**: Must include Changes Made, Testing summary, and completion checklist
+- **Coverage Report**: Include coverage percentage and confirm HTML report was reviewed
+- **Review Required**: All PRs require approval before merging
+- **Status Checks**: All automated tests must pass
+
+#### PR Template
+```markdown
+## Changes Made
+- [Specific changes implemented]
+- [Any architectural decisions or patterns introduced]
+
+## Testing
+- All tests pass: ✅
+- Coverage: X% (meets minimum requirements)
+- HTML coverage report generated and reviewed: ✅
+- Integration tests (if applicable): ✅
+
+## Checklist
+- [ ] Code follows C# and project conventions
+- [ ] All unit tests pass
+- [ ] Coverage thresholds met (85%+ general, 90%+ auth, 95%+ public APIs)
+- [ ] XML documentation added/updated for public APIs
+- [ ] No breaking changes (or breaking changes documented)
+- [ ] Task completion verified against acceptance criteria
+```
+
+#### After PR Approval
+1. **Merge Strategy**: Use "Squash and merge" to maintain clean history
+2. **Branch Cleanup**: GitHub will automatically delete the feature branch
+3. **Local Cleanup**: Delete local feature branch after merge
+   ```bash
+   git checkout main
+   git pull origin main
+   git branch -d feature/task-name
+   ```
+
 ### Commit Strategy
 - Each commit should represent a complete, working feature or fix
 - Commits should compile and pass all tests
 - Use descriptive commit messages that explain the "why" not just the "what"
-- Follow conventional commit format when possible: `feat:`, `fix:`, `docs:`, `test:`
+- Follow conventional commit format: `feat:`, `fix:`, `docs:`, `test:`, `refactor:`
 
 ## Documentation
 
