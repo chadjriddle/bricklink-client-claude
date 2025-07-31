@@ -78,6 +78,65 @@ public class LoggingDelegatingHandlerTests
     }
 
     [Fact]
+    public async Task SendAsync_WithCancellationBeforeRequest_PropagatesCancellation()
+    {
+        // Arrange
+        var cts = new CancellationTokenSource();
+        cts.Cancel();
+
+        var testHandler = new TestHttpMessageHandler(() => new HttpResponseMessage(HttpStatusCode.OK));
+        var handler = new LoggingDelegatingHandler(_mockLogger.Object, _mockLoggingHandler.Object)
+        {
+            InnerHandler = testHandler
+        };
+
+        var httpClient = new HttpClient(handler);
+        var request = new HttpRequestMessage(HttpMethod.Get, "https://api.example.com/test");
+
+        // Act & Assert
+        await Assert.ThrowsAsync<TaskCanceledException>(() => httpClient.SendAsync(request, cts.Token));
+
+        httpClient.Dispose();
+        request.Dispose();
+    }
+
+    [Fact]
+    public async Task SendAsync_WithSlowResponse_MeasuresElapsedTime()
+    {
+        // Arrange
+        var testHandler = new TestHttpMessageHandler(async () =>
+        {
+            await Task.Delay(100); // Simulate slow response
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        });
+
+        var handler = new LoggingDelegatingHandler(_mockLogger.Object, _mockLoggingHandler.Object)
+        {
+            InnerHandler = testHandler
+        };
+
+        var httpClient = new HttpClient(handler);
+        var request = new HttpRequestMessage(HttpMethod.Get, "https://api.example.com/test");
+
+        // Act
+        var response = await httpClient.SendAsync(request);
+
+        // Assert
+        _mockLoggingHandler.Verify(
+            x => x.LogResponseAsync(
+                _mockLogger.Object,
+                request,
+                It.IsAny<HttpResponseMessage>(),
+                It.Is<TimeSpan>(ts => ts.TotalMilliseconds >= 100),
+                It.IsAny<CancellationToken>()),
+            Times.Once);
+
+        httpClient.Dispose();
+        response.Dispose();
+        request.Dispose();
+    }
+
+    [Fact]
     public async Task SendAsync_WithNullRequest_ThrowsArgumentNullException()
     {
         // Arrange
@@ -135,7 +194,7 @@ public class LoggingDelegatingHandlerTests
     {
         // Arrange
         var exception = new HttpRequestException("Test exception");
-        var testHandler = new TestHttpMessageHandler(() => throw exception);
+        var testHandler = new TestHttpMessageHandler(() => Task.FromException<HttpResponseMessage>(exception));
         var handler = new LoggingDelegatingHandler(_mockLogger.Object, _mockLoggingHandler.Object)
         {
             InnerHandler = testHandler
@@ -168,16 +227,24 @@ public class LoggingDelegatingHandlerTests
     /// </summary>
     private class TestHttpMessageHandler : HttpMessageHandler
     {
-        private readonly Func<HttpResponseMessage> _responseFactory;
+        private readonly Func<Task<HttpResponseMessage>> _responseFactory;
 
         public TestHttpMessageHandler(Func<HttpResponseMessage>? responseFactory = null)
         {
-            _responseFactory = responseFactory ?? (() => new HttpResponseMessage(HttpStatusCode.OK));
+            _responseFactory = responseFactory != null
+                ? () => Task.FromResult(responseFactory())
+                : () => Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
+        }
+
+        public TestHttpMessageHandler(Func<Task<HttpResponseMessage>> responseFactory)
+        {
+            _responseFactory = responseFactory ?? (() => Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)));
         }
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            return Task.FromResult(_responseFactory());
+            cancellationToken.ThrowIfCancellationRequested();
+            return _responseFactory();
         }
     }
 }

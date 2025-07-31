@@ -150,7 +150,7 @@ public class HttpLoggingHandler : IHttpLoggingHandler
                 }
             }
 
-            logger.Log(logLevel, "HTTP Response: {HttpMethod} {RequestUri} responded {StatusCode} {ReasonPhrase} in {ElapsedMs}ms", 
+            logger.Log(logLevel, "HTTP Response: {HttpMethod} {RequestUri} responded {StatusCode} {ReasonPhrase} in {ElapsedMs}ms",
                 request.Method.Method, request.RequestUri, statusCode, response.ReasonPhrase, elapsed.TotalMilliseconds);
 
             using var scope = logger.BeginScope(logData);
@@ -194,7 +194,7 @@ public class HttpLoggingHandler : IHttpLoggingHandler
                 logData["RequestHeaders"] = await FormatHeadersAsync(request.Headers, cancellationToken).ConfigureAwait(false);
             }
 
-            logger.Log(_options.ExceptionLogLevel, exception, "HTTP Request Exception: {HttpMethod} {RequestUri} failed after {ElapsedMs}ms", 
+            logger.Log(_options.ExceptionLogLevel, exception, "HTTP Request Exception: {HttpMethod} {RequestUri} failed after {ElapsedMs}ms",
                 request.Method.Method, request.RequestUri, elapsed.TotalMilliseconds);
 
             using var scope = logger.BeginScope(logData);
@@ -247,8 +247,8 @@ public class HttpLoggingHandler : IHttpLoggingHandler
                 }
                 else
                 {
-                    result[headerName] = headerValues?.Count() == 1 
-                        ? headerValues.First() 
+                    result[headerName] = headerValues?.Count() == 1
+                        ? headerValues.First()
                         : headerValues?.ToArray();
                 }
             }
@@ -268,7 +268,7 @@ public class HttpLoggingHandler : IHttpLoggingHandler
         try
         {
             var contentString = await content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-            
+
             if (string.IsNullOrEmpty(contentString))
             {
                 return null;

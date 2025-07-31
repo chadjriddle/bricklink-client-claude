@@ -86,7 +86,7 @@ public static class HttpClientLoggingExtensions
         }
 
         var loggingDelegatingHandler = new LoggingDelegatingHandler(logger, loggingHandler);
-        
+
         if (innerHandler != null)
         {
             loggingDelegatingHandler.InnerHandler = innerHandler;

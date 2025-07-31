@@ -31,7 +31,7 @@ public class HttpClientLoggingExtensionsTests
     public void CreateLoggingHandler_WithLoggerAndLoggingHandler_NullLogger_ThrowsArgumentNullException()
     {
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => 
+        Assert.Throws<ArgumentNullException>(() =>
             HttpClientLoggingExtensions.CreateLoggingHandler(null!, _mockLoggingHandler.Object));
     }
 
@@ -39,7 +39,7 @@ public class HttpClientLoggingExtensionsTests
     public void CreateLoggingHandler_WithLoggerAndLoggingHandler_NullLoggingHandler_ThrowsArgumentNullException()
     {
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => 
+        Assert.Throws<ArgumentNullException>(() =>
             HttpClientLoggingExtensions.CreateLoggingHandler(_mockLogger.Object, (IHttpLoggingHandler)null!));
     }
 
@@ -60,7 +60,7 @@ public class HttpClientLoggingExtensionsTests
     public void CreateLoggingHandler_WithLoggerOnly_NullLogger_ThrowsArgumentNullException()
     {
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => 
+        Assert.Throws<ArgumentNullException>(() =>
             HttpClientLoggingExtensions.CreateLoggingHandler(null!));
     }
 
@@ -83,7 +83,7 @@ public class HttpClientLoggingExtensionsTests
         Assert.IsType<LoggingDelegatingHandler>(handler);
         Assert.NotNull(handler.LoggingHandler);
         Assert.IsType<HttpLoggingHandler>(handler.LoggingHandler);
-        
+
         var httpLoggingHandler = (HttpLoggingHandler)handler.LoggingHandler;
         Assert.Same(options, httpLoggingHandler.Options);
         Assert.False(httpLoggingHandler.Options.LogRequests);
@@ -98,7 +98,7 @@ public class HttpClientLoggingExtensionsTests
         var options = new HttpLoggingOptions();
 
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => 
+        Assert.Throws<ArgumentNullException>(() =>
             HttpClientLoggingExtensions.CreateLoggingHandler(null!, options));
     }
 
@@ -106,7 +106,7 @@ public class HttpClientLoggingExtensionsTests
     public void CreateLoggingHandler_WithLoggerAndOptions_NullOptions_ThrowsArgumentNullException()
     {
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => 
+        Assert.Throws<ArgumentNullException>(() =>
             HttpClientLoggingExtensions.CreateLoggingHandler(_mockLogger.Object, (HttpLoggingOptions)null!));
     }
 
@@ -119,7 +119,7 @@ public class HttpClientLoggingExtensionsTests
         // Assert
         Assert.NotNull(pipeline);
         Assert.IsType<LoggingDelegatingHandler>(pipeline);
-        
+
         var loggingHandler = (LoggingDelegatingHandler)pipeline;
         Assert.Same(_mockLoggingHandler.Object, loggingHandler.LoggingHandler);
         Assert.NotNull(loggingHandler.InnerHandler);
@@ -138,7 +138,7 @@ public class HttpClientLoggingExtensionsTests
         // Assert
         Assert.NotNull(pipeline);
         Assert.IsType<LoggingDelegatingHandler>(pipeline);
-        
+
         var loggingHandler = (LoggingDelegatingHandler)pipeline;
         Assert.Same(_mockLoggingHandler.Object, loggingHandler.LoggingHandler);
         Assert.Same(innerHandler, loggingHandler.InnerHandler);
@@ -150,7 +150,7 @@ public class HttpClientLoggingExtensionsTests
     public void CreateLoggingPipeline_WithLoggerAndLoggingHandler_NullLogger_ThrowsArgumentNullException()
     {
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => 
+        Assert.Throws<ArgumentNullException>(() =>
             HttpClientLoggingExtensions.CreateLoggingPipeline(null!, _mockLoggingHandler.Object));
     }
 
@@ -158,7 +158,7 @@ public class HttpClientLoggingExtensionsTests
     public void CreateLoggingPipeline_WithLoggerAndLoggingHandler_NullLoggingHandler_ThrowsArgumentNullException()
     {
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => 
+        Assert.Throws<ArgumentNullException>(() =>
             HttpClientLoggingExtensions.CreateLoggingPipeline(_mockLogger.Object, (IHttpLoggingHandler)null!));
     }
 
@@ -171,7 +171,7 @@ public class HttpClientLoggingExtensionsTests
         // Assert
         Assert.NotNull(pipeline);
         Assert.IsType<LoggingDelegatingHandler>(pipeline);
-        
+
         var loggingHandler = (LoggingDelegatingHandler)pipeline;
         Assert.NotNull(loggingHandler.LoggingHandler);
         Assert.IsType<HttpLoggingHandler>(loggingHandler.LoggingHandler);
@@ -193,7 +193,7 @@ public class HttpClientLoggingExtensionsTests
         // Assert
         Assert.NotNull(pipeline);
         Assert.IsType<LoggingDelegatingHandler>(pipeline);
-        
+
         var loggingHandler = (LoggingDelegatingHandler)pipeline;
         Assert.NotNull(loggingHandler.LoggingHandler);
         Assert.IsType<HttpLoggingHandler>(loggingHandler.LoggingHandler);
@@ -206,7 +206,7 @@ public class HttpClientLoggingExtensionsTests
     public void CreateLoggingPipeline_WithLoggerOnly_NullLogger_ThrowsArgumentNullException()
     {
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => 
+        Assert.Throws<ArgumentNullException>(() =>
             HttpClientLoggingExtensions.CreateLoggingPipeline(null!, (HttpMessageHandler?)null));
     }
 }

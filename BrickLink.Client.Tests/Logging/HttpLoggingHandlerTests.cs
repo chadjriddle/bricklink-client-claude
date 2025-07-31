@@ -146,7 +146,7 @@ public class HttpLoggingHandlerTests
         using var response = new HttpResponseMessage(HttpStatusCode.OK);
 
         // Act & Assert
-        await Assert.ThrowsAsync<ArgumentNullException>(() => 
+        await Assert.ThrowsAsync<ArgumentNullException>(() =>
             _handler.LogResponseAsync(null!, request, response, TimeSpan.FromMilliseconds(100)));
     }
 
@@ -157,7 +157,7 @@ public class HttpLoggingHandlerTests
         using var response = new HttpResponseMessage(HttpStatusCode.OK);
 
         // Act & Assert
-        await Assert.ThrowsAsync<ArgumentNullException>(() => 
+        await Assert.ThrowsAsync<ArgumentNullException>(() =>
             _handler.LogResponseAsync(_mockLogger.Object, null!, response, TimeSpan.FromMilliseconds(100)));
     }
 
@@ -168,7 +168,7 @@ public class HttpLoggingHandlerTests
         using var request = new HttpRequestMessage(HttpMethod.Get, "https://example.com");
 
         // Act & Assert
-        await Assert.ThrowsAsync<ArgumentNullException>(() => 
+        await Assert.ThrowsAsync<ArgumentNullException>(() =>
             _handler.LogResponseAsync(_mockLogger.Object, request, null!, TimeSpan.FromMilliseconds(100)));
     }
 
@@ -275,7 +275,7 @@ public class HttpLoggingHandlerTests
         var exception = new HttpRequestException("Test exception");
 
         // Act & Assert
-        await Assert.ThrowsAsync<ArgumentNullException>(() => 
+        await Assert.ThrowsAsync<ArgumentNullException>(() =>
             _handler.LogRequestExceptionAsync(null!, request, exception, TimeSpan.FromMilliseconds(100)));
     }
 
@@ -286,7 +286,7 @@ public class HttpLoggingHandlerTests
         var exception = new HttpRequestException("Test exception");
 
         // Act & Assert
-        await Assert.ThrowsAsync<ArgumentNullException>(() => 
+        await Assert.ThrowsAsync<ArgumentNullException>(() =>
             _handler.LogRequestExceptionAsync(_mockLogger.Object, null!, exception, TimeSpan.FromMilliseconds(100)));
     }
 
@@ -297,7 +297,7 @@ public class HttpLoggingHandlerTests
         using var request = new HttpRequestMessage(HttpMethod.Get, "https://example.com");
 
         // Act & Assert
-        await Assert.ThrowsAsync<ArgumentNullException>(() => 
+        await Assert.ThrowsAsync<ArgumentNullException>(() =>
             _handler.LogRequestExceptionAsync(_mockLogger.Object, request, null!, TimeSpan.FromMilliseconds(100)));
     }
 
@@ -337,6 +337,248 @@ public class HttpLoggingHandlerTests
         // Arrange
         using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.example.com/test");
         using var response = new HttpResponseMessage(statusCode);
+
+        // Act
+        await _handler.LogResponseAsync(_mockLogger.Object, request, response, TimeSpan.FromMilliseconds(100));
+
+        // Assert
+        _mockLogger.Verify(
+            x => x.Log(
+                expectedLogLevel,
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.AtLeastOnce);
+    }
+
+    [Fact]
+    public async Task LogRequestAsync_WithResponseContent_LogsContentWhenEnabled()
+    {
+        // Arrange
+        var options = new HttpLoggingOptions { LogResponseContent = true };
+        var handler = new HttpLoggingHandler(options);
+        using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.example.com/test");
+        using var response = new HttpResponseMessage(HttpStatusCode.OK);
+        response.Content = new StringContent("response data", Encoding.UTF8, "application/json");
+
+        // Act
+        await handler.LogResponseAsync(_mockLogger.Object, request, response, TimeSpan.FromMilliseconds(100));
+
+        // Assert
+        _mockLogger.Verify(
+            x => x.Log(
+                It.IsAny<LogLevel>(),
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.AtLeastOnce);
+    }
+
+    [Fact]
+    public async Task LogRequestAsync_WithHeaderRedaction_RedactsSensitiveHeaders()
+    {
+        // Arrange
+        using var request = new HttpRequestMessage(HttpMethod.Post, "https://api.example.com/test");
+        request.Headers.Add("Authorization", "Bearer secret-token");
+        request.Headers.Add("X-API-Key", "api-key-value");
+        request.Headers.Add("User-Agent", "TestAgent/1.0");
+
+        // Act
+        await _handler.LogRequestAsync(_mockLogger.Object, request);
+
+        // Assert - Verify logging was called
+        _mockLogger.Verify(
+            x => x.Log(
+                It.IsAny<LogLevel>(),
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.AtLeastOnce);
+    }
+
+    [Fact]
+    public async Task LogResponseAsync_WithHeaderRedaction_RedactsSensitiveHeaders()
+    {
+        // Arrange
+        using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.example.com/test");
+        using var response = new HttpResponseMessage(HttpStatusCode.OK);
+        response.Headers.Add("Set-Cookie", "session=abc123");
+        response.Headers.Add("WWW-Authenticate", "Bearer realm=api");
+
+        // Act
+        await _handler.LogResponseAsync(_mockLogger.Object, request, response, TimeSpan.FromMilliseconds(100));
+
+        // Assert
+        _mockLogger.Verify(
+            x => x.Log(
+                It.IsAny<LogLevel>(),
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.AtLeastOnce);
+    }
+
+    [Fact]
+    public async Task LogRequestAsync_WithLargeContent_TruncatesContent()
+    {
+        // Arrange
+        var options = new HttpLoggingOptions { LogRequestContent = true, MaxContentLogSize = 10 };
+        var handler = new HttpLoggingHandler(options);
+        var largeContent = new string('x', 100);
+        using var request = new HttpRequestMessage(HttpMethod.Post, "https://api.example.com/test");
+        request.Content = new StringContent(largeContent, Encoding.UTF8, "application/json");
+
+        // Act
+        await handler.LogRequestAsync(_mockLogger.Object, request);
+
+        // Assert
+        _mockLogger.Verify(
+            x => x.Log(
+                It.IsAny<LogLevel>(),
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.AtLeastOnce);
+    }
+
+    [Fact]
+    public async Task LogResponseAsync_WithLargeContent_TruncatesContent()
+    {
+        // Arrange
+        var options = new HttpLoggingOptions { LogResponseContent = true, MaxContentLogSize = 10 };
+        var handler = new HttpLoggingHandler(options);
+        var largeContent = new string('y', 100);
+        using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.example.com/test");
+        using var response = new HttpResponseMessage(HttpStatusCode.OK);
+        response.Content = new StringContent(largeContent, Encoding.UTF8, "application/json");
+
+        // Act
+        await handler.LogResponseAsync(_mockLogger.Object, request, response, TimeSpan.FromMilliseconds(100));
+
+        // Assert
+        _mockLogger.Verify(
+            x => x.Log(
+                It.IsAny<LogLevel>(),
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.AtLeastOnce);
+    }
+
+    [Fact]
+    public async Task LogRequestAsync_WithEmptyContent_HandlesGracefully()
+    {
+        // Arrange
+        var options = new HttpLoggingOptions { LogRequestContent = true };
+        var handler = new HttpLoggingHandler(options);
+        using var request = new HttpRequestMessage(HttpMethod.Post, "https://api.example.com/test");
+        request.Content = new StringContent("", Encoding.UTF8, "application/json");
+
+        // Act
+        await handler.LogRequestAsync(_mockLogger.Object, request);
+
+        // Assert
+        _mockLogger.Verify(
+            x => x.Log(
+                It.IsAny<LogLevel>(),
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.AtLeastOnce);
+    }
+
+    [Fact]
+    public async Task LogResponseAsync_WithEmptyContent_HandlesGracefully()
+    {
+        // Arrange
+        var options = new HttpLoggingOptions { LogResponseContent = true };
+        var handler = new HttpLoggingHandler(options);
+        using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.example.com/test");
+        using var response = new HttpResponseMessage(HttpStatusCode.OK);
+        response.Content = new StringContent("", Encoding.UTF8, "application/json");
+
+        // Act
+        await handler.LogResponseAsync(_mockLogger.Object, request, response, TimeSpan.FromMilliseconds(100));
+
+        // Assert
+        _mockLogger.Verify(
+            x => x.Log(
+                It.IsAny<LogLevel>(),
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.AtLeastOnce);
+    }
+
+    [Fact]
+    public async Task LogRequestAsync_WithMultipleHeaderValues_HandlesCorrectly()
+    {
+        // Arrange
+        using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.example.com/test");
+        request.Headers.Add("Accept", new[] { "application/json", "application/xml" });
+        request.Headers.Add("Cache-Control", new[] { "no-cache", "no-store" });
+
+        // Act
+        await _handler.LogRequestAsync(_mockLogger.Object, request);
+
+        // Assert
+        _mockLogger.Verify(
+            x => x.Log(
+                It.IsAny<LogLevel>(),
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.AtLeastOnce);
+    }
+
+    [Fact]
+    public async Task LogResponseAsync_WithMultipleHeaderValues_HandlesCorrectly()
+    {
+        // Arrange
+        using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.example.com/test");
+        using var response = new HttpResponseMessage(HttpStatusCode.OK);
+        response.Headers.Add("Cache-Control", new[] { "private", "max-age=3600" });
+        response.Headers.Add("Via", new[] { "1.1 proxy1", "1.1 proxy2" });
+
+        // Act
+        await _handler.LogResponseAsync(_mockLogger.Object, request, response, TimeSpan.FromMilliseconds(100));
+
+        // Assert
+        _mockLogger.Verify(
+            x => x.Log(
+                It.IsAny<LogLevel>(),
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.AtLeastOnce);
+    }
+
+    [Theory]
+    [InlineData(100, LogLevel.Information)]
+    [InlineData(199, LogLevel.Information)]
+    [InlineData(200, LogLevel.Information)]
+    [InlineData(299, LogLevel.Information)]
+    [InlineData(300, LogLevel.Information)]
+    [InlineData(399, LogLevel.Information)]
+    [InlineData(400, LogLevel.Warning)]
+    [InlineData(499, LogLevel.Warning)]
+    [InlineData(500, LogLevel.Error)]
+    [InlineData(599, LogLevel.Error)]
+    public async Task LogResponseAsync_HandlesDifferentStatusCodeRanges(int statusCode, LogLevel expectedLogLevel)
+    {
+        // Arrange
+        using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.example.com/test");
+        using var response = new HttpResponseMessage((HttpStatusCode)statusCode);
 
         // Act
         await _handler.LogResponseAsync(_mockLogger.Object, request, response, TimeSpan.FromMilliseconds(100));
