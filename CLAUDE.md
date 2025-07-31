@@ -178,6 +178,40 @@ When working on tasks from `docs/tasks.md`, follow this strict workflow:
 4. **Documentation** - Update XML docs and README as functionality is added
 5. **Clean Code** - Follow C# coding conventions and ensure code is self-documenting
 
+#### CRITICAL: Just-In-Time Interface Creation
+**DO NOT create interfaces, contracts, or placeholder types until they are immediately needed for the specific functional task being implemented.**
+
+**Rules for Interface Creation:**
+- **Create interfaces ONLY when implementing their concrete classes** - Never create "architectural contracts" in advance
+- **Design interfaces based on actual implementation needs** - Not theoretical or anticipated requirements
+- **One interface per task** - If a task requires multiple interfaces, break it into smaller tasks
+- **No placeholder types** - Create real models based on actual API responses, not assumptions
+- **Validate interface design against real data** - Test with actual BrickLink API responses before finalizing contracts
+
+**Example of WRONG approach:**
+```
+❌ Task: "Create all service interfaces for future implementation"
+❌ Creating IApiClient, ICatalogService, IColorService all at once
+❌ Using placeholder models without real API data
+```
+
+**Example of CORRECT approach:**
+```
+✅ Task: "Implement authentication handler"
+✅ Create IAuthenticationHandler only when implementing AuthenticationHandler class
+✅ Task: "Implement catalog item retrieval"
+✅ Create ICatalogService only when implementing CatalogService class
+✅ Design CatalogItem model based on actual API response JSON
+```
+
+**Benefits of Just-In-Time Creation:**
+- Interfaces reflect actual implementation needs, not assumptions
+- Models match real API data structures
+- Smaller, focused PRs that are easier to review
+- Eliminates over-engineering and premature optimization
+- True adherence to YAGNI (You Aren't Gonna Need It) principle
+- Reduces coupling between components
+
 #### After Task Completion:
 1. **Run Full Test Suite** - Execute all tests to ensure nothing is broken
    ```bash
@@ -197,12 +231,16 @@ When working on tasks from `docs/tasks.md`, follow this strict workflow:
    ```bash
    dotnet build -c Release
    ```
-6. **Commit Changes** - Make a single, atomic commit for the completed task with coverage results
-7. **Push Branch** - Push the feature branch to remote repository
+6. **Update Task Documentation** - Mark the completed task in `docs/tasks.md` with a checkbox ✅
+   ```markdown
+   - [x] 1.1 Basic Project Creation - Create .NET solution and projects
+   ```
+7. **Commit Changes** - Make a single, atomic commit for the completed task with coverage results
+8. **Push Branch** - Push the feature branch to remote repository
    ```bash
    git push -u origin feature/task-name
    ```
-8. **Create Pull Request** - Create a PR from the feature branch to main
+9. **Create Pull Request** - Create a PR from the feature branch to main
    ```bash
    gh pr create --title "feat: [Task Description]" --body "Completes task: [task description]
 
@@ -223,8 +261,8 @@ When working on tasks from `docs/tasks.md`, follow this strict workflow:
    - [ ] No breaking changes (or documented if necessary)
    "
    ```
-9. **PR Review Process** - Wait for approval before merging
-10. **Clean Up** - After PR is merged, delete the feature branch locally and remotely
+10. **PR Review Process** - Wait for approval before merging
+11. **Clean Up** - After PR is merged, delete the feature branch locally and remotely
 
 ### Branch Naming Conventions
 - `feature/milestone-1-project-setup` - For milestone tasks
