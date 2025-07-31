@@ -85,14 +85,14 @@ The project foundation is now production-ready with automated quality assurance,
 ## Milestone 2: Core Infrastructure
 
 ### 2.1 API Response Models
-- [ ] Implement `ApiResponse<T>` generic wrapper class
-- [ ] Implement `Meta` model for response metadata
-- [ ] Add JSON property attributes for serialization
+- [x] Implement `ApiResponse<T>` generic wrapper class
+- [x] Implement `Meta` model for response metadata
+- [x] Add JSON property attributes for serialization
 
 ### 2.2 Exception Handling
-- [ ] Create `BrickLinkApiException` base exception class
-- [ ] Add properties for status code, message, and description
-- [ ] Implement exception factory methods for different error types
+- [x] Create `BrickLinkApiException` base exception class
+- [x] Add properties for status code, message, and description
+- [x] Implement exception factory methods for different error types
 
 ### 2.3 JSON Serialization Setup
 - [ ] Configure JsonSerializerOptions for API requirements
