@@ -1,5 +1,10 @@
 # BrickLink API Client for .NET
 
+[![CI/CD Pipeline](https://github.com/chadjriddle/bricklink-client-claude/actions/workflows/ci.yml/badge.svg)](https://github.com/chadjriddle/bricklink-client-claude/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/chadjriddle/bricklink-client-claude/branch/main/graph/badge.svg)](https://codecov.io/gh/chadjriddle/bricklink-client-claude)
+[![.NET](https://img.shields.io/badge/.NET-9.0-purple)](https://dotnet.microsoft.com/download/dotnet/9.0)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A modern, strongly-typed C# client library for the BrickLink API, built on .NET 9.0.
 
 ## Overview
