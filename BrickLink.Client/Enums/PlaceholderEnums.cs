@@ -39,3 +39,19 @@ public enum NewOrUsed
     /// </summary>
     Used
 }
+
+/// <summary>
+/// Placeholder for PriceGuideType enum. Will be fully implemented in Milestone 4.
+/// </summary>
+public enum PriceGuideType
+{
+    /// <summary>
+    /// Current stock-based pricing.
+    /// </summary>
+    Stock,
+    
+    /// <summary>
+    /// Historical sold pricing.
+    /// </summary>
+    Sold
+}

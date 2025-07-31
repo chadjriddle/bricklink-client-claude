@@ -63,9 +63,9 @@ public interface ICatalogService : IApiService
     /// <param name="itemType">The type of the item.</param>
     /// <param name="itemNo">The catalog number of the item.</param>
     /// <param name="colorId">Optional color ID of the item.</param>
-    /// <param name="guideType">The type of price guide ("sold" or "stock").</param>
+    /// <param name="guideType">The type of price guide (Stock or Sold).</param>
     /// <param name="condition">Optional condition filter (New or Used).</param>
     /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A task that represents the asynchronous operation, containing the price guide information.</returns>
-    Task<PriceGuide> GetPriceGuideAsync(ItemType itemType, string itemNo, int? colorId = null, string guideType = "stock", NewOrUsed? condition = null, CancellationToken cancellationToken = default);
+    Task<PriceGuide> GetPriceGuideAsync(ItemType itemType, string itemNo, int? colorId = null, PriceGuideType guideType = PriceGuideType.Stock, NewOrUsed? condition = null, CancellationToken cancellationToken = default);
 }
