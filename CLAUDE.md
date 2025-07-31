@@ -368,3 +368,8 @@ This project uses a **mandatory PR workflow** - direct commits to main are not a
 
 See `docs/tasks.md` for detailed project milestones and task breakdown.
 See `docs/BrickLink API Client Specification.md` for complete API specification.
+
+## Development Memories
+
+### Project Coverage Strategy
+- The last few PRs have failed the coverage test, specifically for path coverage, ensure that all code coverage is complete for any changes made
