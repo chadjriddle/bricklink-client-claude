@@ -75,11 +75,10 @@ public static class TimestampGenerator
         {
             return UnixEpoch.AddSeconds(seconds);
         }
-        catch (ArgumentOutOfRangeException ex)
+        catch (ArgumentOutOfRangeException)
         {
             throw new ArgumentOutOfRangeException(nameof(timestamp),
-                $"Timestamp {timestamp} is outside the valid date range.")
-            { Source = ex.Source };
+                $"Timestamp {timestamp} is outside the valid date range.");
         }
     }
 }

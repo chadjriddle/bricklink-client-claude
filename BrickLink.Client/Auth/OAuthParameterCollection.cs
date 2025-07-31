@@ -40,7 +40,7 @@ public class OAuthParameterCollection : IEnumerable<KeyValuePair<string, string>
     /// <summary>
     /// Gets all parameter keys in the collection.
     /// </summary>
-    public IEnumerable<string> Keys => _parameters.AllKeys.Where(k => k != null)!;
+    public IEnumerable<string> Keys => _parameters.AllKeys.OfType<string>();
 
     /// <summary>
     /// Adds a parameter to the collection.

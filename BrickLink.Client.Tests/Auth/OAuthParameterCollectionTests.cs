@@ -592,4 +592,65 @@ public class OAuthParameterCollectionTests
         Assert.Equal("new_value", collection["test_key"]);
         Assert.Equal(1, collection.Count); // Should still be 1, not 2
     }
+
+    [Fact]
+    public void GetEnumerator_WithParameters_ReturnsCorrectKeyValuePairs()
+    {
+        // Arrange
+        var collection = new OAuthParameterCollection();
+        collection.Add("key1", "value1");
+        collection.Add("key2", "value2");
+
+        // Act
+        var result = new List<KeyValuePair<string, string>>();
+        foreach (var kvp in collection)
+        {
+            result.Add(kvp);
+        }
+
+        // Assert
+        Assert.Equal(2, result.Count);
+        Assert.Contains(new KeyValuePair<string, string>("key1", "value1"), result);
+        Assert.Contains(new KeyValuePair<string, string>("key2", "value2"), result);
+    }
+
+    [Fact]
+    public void GetEnumerator_WithNullValues_HandlesNullProperly()
+    {
+        // Arrange
+        var collection = new OAuthParameterCollection();
+        collection.Add("key1", null);
+        collection.Add("key2", "value2");
+
+        // Act
+        var result = new List<KeyValuePair<string, string>>();
+        foreach (var kvp in collection)
+        {
+            result.Add(kvp);
+        }
+
+        // Assert
+        Assert.Equal(2, result.Count);
+        Assert.Contains(new KeyValuePair<string, string>("key1", ""), result);
+        Assert.Contains(new KeyValuePair<string, string>("key2", "value2"), result);
+    }
+
+    [Fact]
+    public void GetEnumerator_NonGeneric_ReturnsCorrectEnumerator()
+    {
+        // Arrange
+        var collection = new OAuthParameterCollection();
+        collection.Add("key1", "value1");
+
+        // Act & Assert
+        var enumerable = (System.Collections.IEnumerable)collection;
+        var enumerator = enumerable.GetEnumerator();
+
+        Assert.True(enumerator.MoveNext());
+        Assert.IsType<KeyValuePair<string, string>>(enumerator.Current);
+
+        var kvp = (KeyValuePair<string, string>)enumerator.Current;
+        Assert.Equal("key1", kvp.Key);
+        Assert.Equal("value1", kvp.Value);
+    }
 }
