@@ -27,7 +27,8 @@
       "Bash(git config:*)",
       "Bash(dotnet format:*)",
       "Bash(cat:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(dotnet tool install:*)"
     ],
     "deny": []
   }
