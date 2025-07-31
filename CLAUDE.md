@@ -13,7 +13,7 @@ This is a C# .NET 9.0 client library for the BrickLink API. The project is focus
 - **HTTP Client**: System.Net.Http with custom DelegatingHandler for OAuth authentication
 - **JSON Serialization**: System.Text.Json
 - **Authentication**: OAuth 1.0a-like signature scheme with HMAC-SHA1
-- **Testing**: xUnit (planned)
+- **Testing**: xUnit with Moq for mocking
 - **Documentation**: XML documentation comments
 
 ## Build Commands
@@ -47,7 +47,7 @@ dotnet tool install -g dotnet-reportgenerator-globaltool
 reportgenerator -reports:"./TestResults/**/coverage.cobertura.xml" -targetdir:"./TestResults/coveragereport" -reporttypes:Html
 
 # Run specific test project with coverage
-dotnet test tests/BrickLink.Client.Tests --collect:"XPlat Code Coverage" --results-directory:"./TestResults"
+dotnet test BrickLink.Client.Tests --collect:"XPlat Code Coverage" --results-directory:"./TestResults"
 
 # View coverage report (opens HTML report in default browser)
 start ./TestResults/coveragereport/index.html    # Windows
@@ -128,16 +128,22 @@ Every task completion must include:
 - **Platform**: Windows
 - **IDE**: Visual Studio 2022 or VS Code with C# extension
 - **Directory**: `C:\code\ClaudeCode\bricklink-client-claude`
-- **Git Status**: Not currently a git repository
+- **Git Repository**: Active git repository with main branch
 
-## Current Permissions
+## Current Status
 
-Claude Code has limited bash permissions configured in `.claude/settings.local.json`:
-- `dir` command access
-- `ls` command access  
-- `find` command access
+**Project Progress**: Milestone 2 (Core Infrastructure) completed
+- ✅ Milestone 1: Project Foundation & Structure (Completed)
+- ✅ Milestone 2: Core Infrastructure (Completed) 
+  - API Response Models, Exception Handling, JSON Serialization
+  - HTTP Client Wrapper, Retry Logic, Request/Response Logging
+- 🚧 Milestone 3: Authentication System (Next)
 
-Additional permissions may need to be granted for .NET CLI operations.
+**CI/CD Pipeline**: Fully operational with GitHub Actions
+- Automated testing with xUnit
+- Code coverage reporting via Codecov (85% minimum threshold)
+- Security scanning and formatting checks
+- Mandatory PR workflow with quality gates
 
 ## MVP Scope
 
