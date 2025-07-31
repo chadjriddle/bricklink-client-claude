@@ -2,6 +2,16 @@
 
 This document outlines the high-level milestones and individual tasks required to complete the MVP for the BrickLink API client library.
 
+## Development Approach (Updated)
+
+**Just-In-Time Interface Creation**: This project follows a strict Just-In-Time approach for interface and contract creation. Interfaces are created ONLY when implementing their concrete classes, and models are designed based on actual API responses, not assumptions.
+
+**Task Status Legend**:
+- [x] Completed tasks
+- [ ] Pending tasks  
+- Tasks marked as "(Just-In-Time)" create interfaces only when implementing concrete classes
+- Tasks marked as "(DEPRECATED)" used old "design-first" approach and are completed but not recommended for future work
+
 ## Project Scope (MVP)
 - Authentication/Authorization (OAuth 1.0a-like signature)
 - Simple consumer pattern for API interactions
@@ -11,28 +21,30 @@ This document outlines the high-level milestones and individual tasks required t
 ## Milestone 1: Project Foundation & Structure
 
 ### 1.1 Basic Project Creation
-- [ ] Create .NET 9.0 class library project
-- [ ] Create xUnit test project
-- [ ] Create solution file linking both projects
+- [x] Create .NET 9.0 class library project
+- [x] Create xUnit test project
+- [x] Create solution file linking both projects
 
 ### 1.2 Project Configuration
-- [ ] Configure main project file with package metadata (name, description, version)
-- [ ] Add System.Text.Json NuGet package reference
-- [ ] Add System.Net.Http NuGet package reference
-- [ ] Configure EditorConfig for C# formatting rules
-- [ ] Add code style settings (.editorconfig)
+- [x] Configure main project file with package metadata (name, description, version)
+- [x] Add System.Text.Json NuGet package reference
+- [x] Add System.Net.Http NuGet package reference
+- [x] Configure EditorConfig for C# formatting rules
+- [x] Add code style settings (.editorconfig)
 
 ### 1.3 Project Structure Setup
-- [ ] Create BrickLink.Client root namespace folder
-- [ ] Create BrickLink.Client.Auth namespace folder
-- [ ] Create BrickLink.Client.Models namespace folder
-- [ ] Create BrickLink.Client.Enums namespace folder
-- [ ] Create BrickLink.Client.Services namespace folder
+- [x] Create BrickLink.Client root namespace folder
+- [x] Create BrickLink.Client.Auth namespace folder
+- [x] Create BrickLink.Client.Models namespace folder
+- [x] Create BrickLink.Client.Enums namespace folder
+- [x] Create BrickLink.Client.Services namespace folder
 
-### 1.4 Architecture Contracts
-- [ ] Define IApiClient interface for main client contract
-- [ ] Define IAuthenticationHandler interface
-- [ ] Define IApiService base interface for service contracts
+### 1.4 Architecture Contracts (DEPRECATED - COMPLETED WITH LEGACY APPROACH)
+- [x] Define IApiClient interface for main client contract
+- [x] Define IAuthenticationHandler interface
+- [x] Define IApiService base interface for service contracts
+
+**Note**: This task was completed using a legacy "design-first" approach that created all interfaces upfront with placeholder types. Future interface creation will follow Just-In-Time rules - creating interfaces only when implementing their concrete classes.
 
 ### 1.5 CI/CD and Coverage Integration
 - [ ] Create GitHub Actions workflow for CI/CD
@@ -101,7 +113,8 @@ This document outlines the high-level milestones and individual tasks required t
 - [ ] Implement OAuth parameter formatting
 - [ ] Add header validation
 
-### 3.6 Authentication Handler
+### 3.6 Authentication Handler Implementation
+- [ ] Create `IAuthenticationHandler` interface (Just-In-Time)
 - [ ] Implement `AuthenticationHandler` inheriting from `DelegatingHandler`
 - [ ] Integrate all authentication components
 - [ ] Add request interception and modification
@@ -154,22 +167,19 @@ This document outlines the high-level milestones and individual tasks required t
 - [ ] Add response deserialization with error checking
 - [ ] Create response validation and exception throwing
 
-### 5.4 Main Client Class Structure
+### 5.4 Main Client Class Implementation
+- [ ] Create `IApiClient` interface (Just-In-Time)
 - [ ] Create `BrickLinkClient` class with credential constructor
 - [ ] Configure HttpClient with authentication handler
 - [ ] Add client disposal pattern implementation
-
-### 5.5 Service Property Accessors
-- [ ] Add ICatalogService property accessor
-- [ ] Add IColorService property accessor  
-- [ ] Add ICategoryService property accessor
-- [ ] Add IItemMappingService property accessor
+- [ ] Add service property accessors as services are implemented
 
 ## Milestone 6: Catalog Services (MVP Core)
 
-### 6.1 Catalog Service Interface
-- [ ] Define `ICatalogService` interface with method signatures
+### 6.1 Catalog Service Implementation
+- [ ] Define `ICatalogService` interface based on actual API requirements
 - [ ] Create `CatalogService` class inheriting from `BaseApiService`
+- [ ] Design models based on actual BrickLink API responses (no placeholders)
 
 ### 6.2 Basic Item Operations
 - [ ] Implement `GetItemAsync(ItemType type, string itemNo)` method
@@ -184,37 +194,40 @@ This document outlines the high-level milestones and individual tasks required t
 - [ ] Implement `GetPriceGuideAsync(ItemType type, string itemNo, int? colorId, string guideType, NewOrUsed? condition)` method
 
 ### 6.5 Color Service Implementation
-- [ ] Define `IColorService` interface
+- [ ] Define `IColorService` interface based on actual API requirements
 - [ ] Create `ColorService` class inheriting from `BaseApiService`
+- [ ] Design Color models from actual API responses
 - [ ] Implement `GetColorsAsync()` method
 - [ ] Implement `GetColorAsync(int colorId)` method
 
 ### 6.6 Category Service Implementation
-- [ ] Define `ICategoryService` interface
+- [ ] Define `ICategoryService` interface based on actual API requirements
 - [ ] Create `CategoryService` class inheriting from `BaseApiService`
+- [ ] Design Category models from actual API responses
 - [ ] Implement `GetCategoriesAsync()` method
 - [ ] Implement `GetCategoryAsync(int categoryId)` method
 
 ### 6.7 Item Mapping Service Implementation
-- [ ] Define `IItemMappingService` interface
+- [ ] Define `IItemMappingService` interface based on actual API requirements
 - [ ] Create `ItemMappingService` class inheriting from `BaseApiService`
+- [ ] Design ItemMapping models from actual API responses
 - [ ] Implement `GetElementIdAsync(string partNo, int? colorId)` method
 - [ ] Implement `GetItemNumberAsync(string elementId)` method
 
 ## Milestone 7: Consumer Pattern Implementation
 
-### 7.1 Query Builder Interfaces
-- [ ] Create `ICatalogQueryBuilder` interface for fluent catalog queries
-- [ ] Create `IPriceGuideQueryBuilder` interface for price guide queries
-- [ ] Define builder method signatures for common operations
-
-### 7.2 Query Builder Implementations
+### 7.1 Catalog Query Builder Implementation
+- [ ] Create `ICatalogQueryBuilder` interface (Just-In-Time)
 - [ ] Implement `CatalogQueryBuilder` with method chaining
+- [ ] Add query execution methods that return results
+
+### 7.2 Price Guide Query Builder Implementation
+- [ ] Create `IPriceGuideQueryBuilder` interface (Just-In-Time)
 - [ ] Implement `PriceGuideQueryBuilder` with filtering options
 - [ ] Add query execution methods that return results
 
-### 7.3 Caching Infrastructure
-- [ ] Create `IApiCache` interface for caching abstraction
+### 7.3 Caching Infrastructure Implementation
+- [ ] Create `IApiCache` interface (Just-In-Time)
 - [ ] Implement `MemoryApiCache` using IMemoryCache
 - [ ] Add cache key generation utilities
 
