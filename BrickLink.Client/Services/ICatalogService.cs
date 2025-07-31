@@ -1,5 +1,5 @@
-using BrickLink.Client.Models;
 using BrickLink.Client.Enums;
+using BrickLink.Client.Models;
 
 namespace BrickLink.Client.Services;
 

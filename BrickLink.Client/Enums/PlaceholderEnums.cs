@@ -12,12 +12,12 @@ public enum ItemType
     /// Placeholder value.
     /// </summary>
     Part,
-    
+
     /// <summary>
     /// Placeholder value.
     /// </summary>
     Set,
-    
+
     /// <summary>
     /// Placeholder value.
     /// </summary>
@@ -33,7 +33,7 @@ public enum NewOrUsed
     /// New condition.
     /// </summary>
     New,
-    
+
     /// <summary>
     /// Used condition.
     /// </summary>
@@ -49,7 +49,7 @@ public enum PriceGuideType
     /// Current stock-based pricing.
     /// </summary>
     Stock,
-    
+
     /// <summary>
     /// Historical sold pricing.
     /// </summary>

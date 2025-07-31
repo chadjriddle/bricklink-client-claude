@@ -212,6 +212,22 @@ When working on tasks from `docs/tasks.md`, follow this strict workflow:
 - True adherence to YAGNI (You Aren't Gonna Need It) principle
 - Reduces coupling between components
 
+#### CRITICAL: Zero-Warning Policy
+**All build warnings must be resolved before any commit or PR creation.**
+
+**Common Warning Types & Resolutions:**
+- **CS1591 - Missing XML documentation**: Add `/// <summary>` documentation to all public types and members
+- **CS0168 - Variable declared but not used**: Remove unused variables or use discard `_`
+- **CS0219 - Variable assigned but not used**: Remove unused assignments
+- **CS8618 - Non-nullable reference types**: Initialize properties or mark as nullable
+- **Obsolete API warnings**: Replace with recommended alternatives
+
+**Warning Resolution Workflow:**
+1. Run `dotnet build -c Release` and capture all warnings
+2. Address each warning individually 
+3. Re-run build to confirm zero warnings
+4. Only proceed with commit after achieving zero-warning build
+
 #### After Task Completion:
 1. **Run Full Test Suite** - Execute all tests to ensure nothing is broken
    ```bash
@@ -227,10 +243,15 @@ When working on tasks from `docs/tasks.md`, follow this strict workflow:
    start ./TestResults/coveragereport/index.html  # Windows
    ```
 4. **Coverage Requirements** - Ensure minimum 85% code coverage for new code, 90% for critical authentication components
-5. **Build Verification** - Ensure code compiles successfully in Release mode
+5. **Build Verification** - Ensure code compiles successfully with NO warnings in Release mode
    ```bash
    dotnet build -c Release
    ```
+   **CRITICAL**: All build warnings must be resolved before committing. Zero-warning policy enforced.
+   - Fix missing XML documentation warnings (CS1591)
+   - Address any code analysis warnings
+   - Resolve obsolete API usage warnings
+   - Clean up unused using statements and variables
 6. **Update Task Documentation** - Mark the completed task in `docs/tasks.md` with a checkbox ✅
    ```markdown
    - [x] 1.1 Basic Project Creation - Create .NET solution and projects

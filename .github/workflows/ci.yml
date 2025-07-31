@@ -1,0 +1,170 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  DOTNET_VERSION: '9.0.x'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Build, Test & Coverage
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build solution
+      run: dotnet build --configuration Release --no-restore
+    
+    - name: Run tests with coverage
+      run: |
+        dotnet test --configuration Release --no-build \
+          --collect:"XPlat Code Coverage" \
+          --results-directory:"./TestResults" \
+          --logger:"trx" \
+          --verbosity normal
+    
+    - name: Generate coverage report
+      run: |
+        dotnet tool install -g dotnet-reportgenerator-globaltool
+        reportgenerator \
+          -reports:"./TestResults/**/coverage.cobertura.xml" \
+          -targetdir:"./TestResults/coveragereport" \
+          -reporttypes:"Html;Cobertura" \
+          -verbosity:Info
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./TestResults/**/coverage.cobertura.xml
+        directory: ./TestResults
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: true
+        verbose: true
+    
+    - name: Archive test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results
+        path: |
+          ./TestResults/**/*.trx
+          ./TestResults/coveragereport/
+        retention-days: 30
+    
+    - name: Archive coverage reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-reports
+        path: ./TestResults/**/coverage.cobertura.xml
+        retention-days: 30
+
+  lint:
+    runs-on: ubuntu-latest
+    name: Code Quality & Formatting
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Check formatting
+      run: dotnet format --verify-no-changes --verbosity diagnostic
+    
+    - name: Build for analysis
+      run: dotnet build --configuration Debug --no-restore
+
+  security:
+    runs-on: ubuntu-latest
+    name: Security Scan
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Run security scan
+      run: |
+        dotnet list package --vulnerable --include-transitive 2>&1 | tee security-scan.log
+        if grep -q "has the following vulnerable packages" security-scan.log; then
+          echo "❌ Vulnerable packages found!"
+          cat security-scan.log
+          exit 1
+        else
+          echo "✅ No vulnerable packages found"
+        fi
+
+  coverage-check:
+    runs-on: ubuntu-latest
+    name: Coverage Threshold Check
+    needs: test
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Download coverage reports
+      uses: actions/download-artifact@v4
+      with:
+        name: coverage-reports
+        path: ./TestResults
+    
+    - name: Install coverage tools
+      run: |
+        dotnet tool install -g dotnet-reportgenerator-globaltool
+    
+    - name: Check coverage thresholds
+      run: |
+        reportgenerator \
+          -reports:"./TestResults/**/coverage.cobertura.xml" \
+          -targetdir:"./coverage-check" \
+          -reporttypes:"JsonSummary" \
+          -verbosity:Info
+        
+        # Parse coverage percentage from JSON summary
+        COVERAGE=$(cat ./coverage-check/Summary.json | grep -o '"linecoverage": [0-9.]*' | grep -o '[0-9.]*')
+        echo "Current coverage: ${COVERAGE}%"
+        
+        # Check minimum thresholds
+        MIN_COVERAGE=85
+        if awk "BEGIN {exit !(${COVERAGE} < ${MIN_COVERAGE})}"; then
+          echo "❌ Coverage ${COVERAGE}% is below minimum threshold of ${MIN_COVERAGE}%"
+          exit 1
+        else
+          echo "✅ Coverage ${COVERAGE}% meets minimum threshold of ${MIN_COVERAGE}%"
+        fi
