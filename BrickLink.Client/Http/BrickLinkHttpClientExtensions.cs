@@ -15,8 +15,7 @@ public static class BrickLinkHttpClientExtensions
     /// <param name="retryHandler">The retry handler to use. If null, uses default retry handler.</param>
     /// <param name="cancellationToken">A cancellation token to cancel operation.</param>
     /// <returns>The task object representing the asynchronous operation.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when client or requestUri is null.</exception>
-    /// <exception cref="ArgumentException">Thrown when requestUri is empty or consists only of whitespace.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when client is null.</exception>
     public static Task<HttpResponseMessage> GetWithRetryAsync(
         this BrickLinkHttpClient client,
         string requestUri,
@@ -40,7 +39,7 @@ public static class BrickLinkHttpClientExtensions
     /// <param name="retryHandler">The retry handler to use. If null, uses default retry handler.</param>
     /// <param name="cancellationToken">A cancellation token to cancel operation.</param>
     /// <returns>The task object representing the asynchronous operation.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when client or requestUri is null.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when client is null.</exception>
     public static Task<HttpResponseMessage> GetWithRetryAsync(
         this BrickLinkHttpClient client,
         Uri requestUri,
@@ -65,8 +64,7 @@ public static class BrickLinkHttpClientExtensions
     /// <param name="retryHandler">The retry handler to use. If null, uses default retry handler.</param>
     /// <param name="cancellationToken">A cancellation token to cancel operation.</param>
     /// <returns>The task object representing the asynchronous operation.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when client or requestUri is null.</exception>
-    /// <exception cref="ArgumentException">Thrown when requestUri is empty or consists only of whitespace.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when client is null.</exception>
     public static Task<HttpResponseMessage> PostWithRetryAsync(
         this BrickLinkHttpClient client,
         string requestUri,
@@ -92,7 +90,7 @@ public static class BrickLinkHttpClientExtensions
     /// <param name="retryHandler">The retry handler to use. If null, uses default retry handler.</param>
     /// <param name="cancellationToken">A cancellation token to cancel operation.</param>
     /// <returns>The task object representing the asynchronous operation.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when client or requestUri is null.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when client is null.</exception>
     public static Task<HttpResponseMessage> PostWithRetryAsync(
         this BrickLinkHttpClient client,
         Uri requestUri,
@@ -118,8 +116,7 @@ public static class BrickLinkHttpClientExtensions
     /// <param name="retryHandler">The retry handler to use. If null, uses default retry handler.</param>
     /// <param name="cancellationToken">A cancellation token to cancel operation.</param>
     /// <returns>The task object representing the asynchronous operation.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when client or requestUri is null.</exception>
-    /// <exception cref="ArgumentException">Thrown when requestUri is empty or consists only of whitespace.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when client is null.</exception>
     public static Task<HttpResponseMessage> PutWithRetryAsync(
         this BrickLinkHttpClient client,
         string requestUri,
@@ -145,7 +142,7 @@ public static class BrickLinkHttpClientExtensions
     /// <param name="retryHandler">The retry handler to use. If null, uses default retry handler.</param>
     /// <param name="cancellationToken">A cancellation token to cancel operation.</param>
     /// <returns>The task object representing the asynchronous operation.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when client or requestUri is null.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when client is null.</exception>
     public static Task<HttpResponseMessage> PutWithRetryAsync(
         this BrickLinkHttpClient client,
         Uri requestUri,
@@ -170,8 +167,7 @@ public static class BrickLinkHttpClientExtensions
     /// <param name="retryHandler">The retry handler to use. If null, uses default retry handler.</param>
     /// <param name="cancellationToken">A cancellation token to cancel operation.</param>
     /// <returns>The task object representing the asynchronous operation.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when client or requestUri is null.</exception>
-    /// <exception cref="ArgumentException">Thrown when requestUri is empty or consists only of whitespace.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when client is null.</exception>
     public static Task<HttpResponseMessage> DeleteWithRetryAsync(
         this BrickLinkHttpClient client,
         string requestUri,
@@ -195,7 +191,7 @@ public static class BrickLinkHttpClientExtensions
     /// <param name="retryHandler">The retry handler to use. If null, uses default retry handler.</param>
     /// <param name="cancellationToken">A cancellation token to cancel operation.</param>
     /// <returns>The task object representing the asynchronous operation.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when client or requestUri is null.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when client is null.</exception>
     public static Task<HttpResponseMessage> DeleteWithRetryAsync(
         this BrickLinkHttpClient client,
         Uri requestUri,

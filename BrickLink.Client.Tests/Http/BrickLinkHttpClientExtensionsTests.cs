@@ -248,4 +248,66 @@ public sealed class BrickLinkHttpClientExtensionsTests
         await Assert.ThrowsAsync<ArgumentNullException>(() =>
             BrickLinkHttpClientExtensions.DeleteWithRetryAsync(null!, "test"));
     }
+
+    [Fact]
+    public async Task GetWithRetryAsync_WithStringUri_WithoutRetryHandler_UsesDefaultHandler()
+    {
+        // Arrange
+        using var handler = new HttpClientHandler();
+        using var httpClient = new HttpClient(handler);
+        httpClient.BaseAddress = new Uri("https://httpbin.org/");
+        using var client = new BrickLinkHttpClient(httpClient);
+
+        // Act & Assert (should not throw - using real HTTP endpoint)
+        var result = await client.GetWithRetryAsync("status/200");
+        Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+        result.Dispose();
+    }
+
+    [Fact]
+    public async Task PostWithRetryAsync_WithStringUri_WithoutRetryHandler_UsesDefaultHandler()
+    {
+        // Arrange
+        using var handler = new HttpClientHandler();
+        using var httpClient = new HttpClient(handler);
+        httpClient.BaseAddress = new Uri("https://httpbin.org/");
+        using var client = new BrickLinkHttpClient(httpClient);
+        var content = new StringContent("test");
+
+        // Act & Assert (should not throw - using real HTTP endpoint)
+        var result = await client.PostWithRetryAsync("post", content);
+        Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+        result.Dispose();
+    }
+
+    [Fact]
+    public async Task PutWithRetryAsync_WithStringUri_WithoutRetryHandler_UsesDefaultHandler()
+    {
+        // Arrange
+        using var handler = new HttpClientHandler();
+        using var httpClient = new HttpClient(handler);
+        httpClient.BaseAddress = new Uri("https://httpbin.org/");
+        using var client = new BrickLinkHttpClient(httpClient);
+        var content = new StringContent("test");
+
+        // Act & Assert (should not throw - using real HTTP endpoint)
+        var result = await client.PutWithRetryAsync("put", content);
+        Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+        result.Dispose();
+    }
+
+    [Fact]
+    public async Task DeleteWithRetryAsync_WithStringUri_WithoutRetryHandler_UsesDefaultHandler()
+    {
+        // Arrange
+        using var handler = new HttpClientHandler();
+        using var httpClient = new HttpClient(handler);
+        httpClient.BaseAddress = new Uri("https://httpbin.org/");
+        using var client = new BrickLinkHttpClient(httpClient);
+
+        // Act & Assert (should not throw - using real HTTP endpoint)
+        var result = await client.DeleteWithRetryAsync("delete");
+        Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+        result.Dispose();
+    }
 }

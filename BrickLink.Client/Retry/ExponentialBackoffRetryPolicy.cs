@@ -10,7 +10,6 @@ namespace BrickLink.Client.Retry;
 public sealed class ExponentialBackoffRetryPolicy : IRetryPolicy
 {
     private readonly RetryPolicyOptions _options;
-    private readonly Random _random;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ExponentialBackoffRetryPolicy"/> class.
@@ -22,7 +21,6 @@ public sealed class ExponentialBackoffRetryPolicy : IRetryPolicy
     {
         _options = options?.Clone() ?? new RetryPolicyOptions();
         ValidateOptions(_options);
-        _random = new Random();
     }
 
     /// <inheritdoc />
@@ -156,7 +154,7 @@ public sealed class ExponentialBackoffRetryPolicy : IRetryPolicy
     {
         // Generate a random multiplier between (1 - jitterFactor) and (1 + jitterFactor)
         var jitterRange = jitterFactor * 2;
-        var jitterMultiplier = (1 - jitterFactor) + (_random.NextDouble() * jitterRange);
+        var jitterMultiplier = (1 - jitterFactor) + (Random.Shared.NextDouble() * jitterRange);
 
         var jitteredDelayMs = delay.TotalMilliseconds * jitterMultiplier;
         return TimeSpan.FromMilliseconds(Math.Max(0, jitteredDelayMs));

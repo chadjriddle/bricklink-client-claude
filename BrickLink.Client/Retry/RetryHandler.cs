@@ -69,13 +69,10 @@ public class RetryHandler
                     throw;
                 }
 
-                if (attemptCount <= _retryPolicy.MaxRetryAttempts)
+                var delay = _retryPolicy.GetRetryDelay(attemptCount);
+                if (delay > TimeSpan.Zero)
                 {
-                    var delay = _retryPolicy.GetRetryDelay(attemptCount);
-                    if (delay > TimeSpan.Zero)
-                    {
-                        await Task.Delay(delay, cancellationToken).ConfigureAwait(false);
-                    }
+                    await Task.Delay(delay, cancellationToken).ConfigureAwait(false);
                 }
             }
         }
@@ -125,7 +122,7 @@ public class RetryHandler
 
                     // Check if this status code is retriable
                     bool shouldRetry = _retryPolicy.ShouldRetry(response.StatusCode, attemptCount);
-                    
+
                     if (shouldRetry)
                     {
                         response.Dispose(); // Dispose the failed response
