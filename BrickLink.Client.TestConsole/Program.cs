@@ -56,18 +56,47 @@ internal class Program
     }
 
     /// <summary>
-    /// Loads environment variables from a .env file if it exists in the current directory.
+    /// Loads environment variables from a .env file if it exists.
+    /// Searches for the .env file in the application directory first, then the current working directory.
     /// This method silently handles cases where the .env file doesn't exist or can't be read.
     /// </summary>
     private static void LoadEnvironmentFile()
     {
         try
         {
-            var envFilePath = Path.Combine(Directory.GetCurrentDirectory(), ".env");
+            // First, try to find .env file in the application's directory (where the exe is located)
+            var appDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            var envFilePath = Path.Combine(appDirectory ?? "", ".env");
+            
+            // If not found in app directory, try the current working directory
+            if (!File.Exists(envFilePath))
+            {
+                envFilePath = Path.Combine(Directory.GetCurrentDirectory(), ".env");
+            }
+            
+            // If still not found, try looking in the project source directory
+            if (!File.Exists(envFilePath))
+            {
+                // Get the directory containing the source code (where Program.cs is located)
+                var sourceFile = GetSourceFilePath();
+                if (!string.IsNullOrEmpty(sourceFile))
+                {
+                    var sourceDirectory = Path.GetDirectoryName(sourceFile);
+                    if (!string.IsNullOrEmpty(sourceDirectory))
+                    {
+                        envFilePath = Path.Combine(sourceDirectory, ".env");
+                    }
+                }
+            }
+            
             if (File.Exists(envFilePath))
             {
                 Env.Load(envFilePath);
-                Console.WriteLine("Loaded environment variables from .env file...");
+                Console.WriteLine($"Loaded environment variables from .env file: {envFilePath}");
+            }
+            else
+            {
+                Console.WriteLine("No .env file found. Using system environment variables or interactive input.");
             }
         }
         catch (Exception ex)
@@ -75,6 +104,17 @@ internal class Program
             // Silently handle .env file loading errors to not disrupt the normal flow
             Console.WriteLine($"Note: Could not load .env file: {ex.Message}");
         }
+    }
+
+    /// <summary>
+    /// Gets the source file path of the current method using caller attributes.
+    /// This helps locate the .env file relative to the source code location.
+    /// </summary>
+    /// <param name="sourceFilePath">Automatically populated with the source file path.</param>
+    /// <returns>The source file path or null if not available.</returns>
+    private static string? GetSourceFilePath([System.Runtime.CompilerServices.CallerFilePath] string? sourceFilePath = null)
+    {
+        return sourceFilePath;
     }
 
     /// <summary>
@@ -98,6 +138,8 @@ internal class Program
         }
 
         Console.WriteLine("Loading credentials from environment variables...");
+        Console.WriteLine($"Consumer Key: {consumerKey?.Substring(0, Math.Min(8, consumerKey.Length))}...");
+        Console.WriteLine($"Token Value: {tokenValue?.Substring(0, Math.Min(8, tokenValue.Length))}...");
         return new BrickLinkCredentials(consumerKey, consumerSecret, tokenValue, tokenSecret);
     }
 
@@ -174,8 +216,8 @@ internal class Program
 
         // Test OAuth signature generation and header construction
         Console.WriteLine("Testing OAuth signature generation...");
-        var testUrl = "https://api.bricklink.com/api/v1/colors";
-        Console.WriteLine($"Target URL: {testUrl}");
+        var testUrl = "colors";
+        Console.WriteLine($"Target URL: {httpClient.BaseAddress}{testUrl}");
 
         // Make authenticated request to BrickLink API
         Console.WriteLine("Making authenticated request to BrickLink API...");
