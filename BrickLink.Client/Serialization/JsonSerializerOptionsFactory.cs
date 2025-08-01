@@ -36,12 +36,16 @@ public static class JsonSerializerOptionsFactory
             // Allow comments in JSON for configuration files
             ReadCommentHandling = JsonCommentHandling.Skip,
 
-            // Use string enum conversion for better readability
+            // Custom converters for BrickLink API-specific serialization
             Converters =
             {
-                new JsonStringEnumConverter(JsonNamingPolicy.CamelCase),
                 new DateTimeOffsetConverter(),
-                new DecimalPrecisionConverter()
+                new DecimalPrecisionConverter(),
+                new ItemTypeConverter(),
+                new NewOrUsedConverter(),
+                new CompletenessConverter(),
+                new DirectionConverter(),
+                new PriceGuideTypeConverter()
             }
         };
 
