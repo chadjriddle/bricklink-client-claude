@@ -45,7 +45,8 @@ public static class JsonSerializerOptionsFactory
                 new NewOrUsedConverter(),
                 new CompletenessConverter(),
                 new DirectionConverter(),
-                new PriceGuideTypeConverter()
+                new PriceGuideTypeConverter(),
+                new AppearAsConverter()
             }
         };
 
