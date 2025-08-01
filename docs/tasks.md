@@ -308,24 +308,34 @@ The OAuth 1.0a authentication system is now production-ready with comprehensive 
 
 ## Milestone 5: Core Client Implementation
 
-### 5.1 Base Service Architecture
+### 5.1 Git Pre-Commit Hooks Implementation
+- [ ] Implement direct git pre-commit hooks for code quality enforcement
+- [ ] Configure pre-commit hook to run `dotnet format --verify-no-changes` (prevents commits with formatting issues)
+- [ ] Configure pre-commit hook to run `dotnet build -c Release` (ensures zero-warning builds)
+- [ ] Configure pre-commit hook to run `dotnet test` (runs unit tests to catch regressions)
+- [ ] Add pre-commit hook script with proper exit codes and error reporting
+- [ ] Document hook installation process in README.md
+- [ ] Test hook functionality with intentionally failing scenarios
+- [ ] Ensure hooks work cross-platform (Windows/Linux/macOS)
+
+### 5.2 Base Service Architecture
 - [ ] Create `BaseApiService` abstract class
 - [ ] Add HttpClient dependency injection
 - [ ] Implement base URL construction
 
-### 5.2 HTTP Method Implementations
+### 5.3 HTTP Method Implementations
 - [ ] Implement generic GET method with response handling
 - [ ] Implement generic POST method with request/response handling
 - [ ] Implement generic PUT method with request/response handling
 - [ ] Implement generic DELETE method with response handling
 
-### 5.3 Parameter and Response Handling
+### 5.4 Parameter and Response Handling
 - [ ] Create query parameter serialization helpers
 - [ ] Implement request body serialization
 - [ ] Add response deserialization with error checking
 - [ ] Create response validation and exception throwing
 
-### 5.4 Main Client Class Implementation
+### 5.5 Main Client Class Implementation
 - [ ] Create `IApiClient` interface (Just-In-Time)
 - [ ] Create `BrickLinkClient` class with credential constructor
 - [ ] Configure HttpClient with authentication handler
