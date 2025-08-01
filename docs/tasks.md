@@ -264,11 +264,22 @@ The OAuth 1.0a authentication system is now production-ready with comprehensive 
 
 ## Milestone 4: Data Models
 
-### 4.1 Core Enumerations
-- [ ] `ItemType` enum (PART, SET, MINIFIG, etc.)
-- [ ] `NewOrUsed` enum (N, U)
-- [ ] `Completeness` enum (C, B, S)
-- [ ] `Direction` enum (in, out)
+### 4.1 Core Enumerations ✅
+- [x] `ItemType` enum (PART, SET, MINIFIG, etc.)
+- [x] `NewOrUsed` enum (N, U)
+- [x] `Completeness` enum (C, B, S)
+- [x] `Direction` enum (in, out)
+- [x] `PriceGuideType` enum (stock, sold)
+
+**Completed**: Core enumeration infrastructure implemented with comprehensive BrickLink API-specific JSON serialization converters and 100% test coverage. Features include:
+- **ItemType**: Full support for all BrickLink item types with proper API string mapping
+- **NewOrUsed**: N/U condition mapping for items
+- **Completeness**: C/B/S set completeness mapping
+- **Direction**: in/out directional filtering for API queries
+- **PriceGuideType**: stock/sold price guide type selection
+- **Custom JSON Converters**: Dedicated converters for each enum ensuring proper BrickLink API serialization
+- **Comprehensive Testing**: 141 additional test cases with 100% enum coverage, all passing
+- **Zero-Warning Build**: Professional code quality with no build warnings in Release mode
 
 ### 4.2 Catalog Item Models
 - [ ] `CatalogItem` model with all properties
