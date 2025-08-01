@@ -1,5 +1,6 @@
 using System.Text.Json;
 using BrickLink.Client.Auth;
+using DotNetEnv;
 
 namespace BrickLink.Client.TestConsole;
 
@@ -21,7 +22,10 @@ internal class Program
         Console.WriteLine("========================================");
         Console.WriteLine();
 
-        // Get credentials from environment variables or user input
+        // Load .env file if it exists
+        LoadEnvironmentFile();
+
+        // Get credentials from .env file, environment variables, or user input
         var credentials = GetCredentialsFromEnvironment() ?? GetCredentialsFromUser();
 
         if (credentials == null)
@@ -52,7 +56,30 @@ internal class Program
     }
 
     /// <summary>
+    /// Loads environment variables from a .env file if it exists in the current directory.
+    /// This method silently handles cases where the .env file doesn't exist or can't be read.
+    /// </summary>
+    private static void LoadEnvironmentFile()
+    {
+        try
+        {
+            var envFilePath = Path.Combine(Directory.GetCurrentDirectory(), ".env");
+            if (File.Exists(envFilePath))
+            {
+                Env.Load(envFilePath);
+                Console.WriteLine("Loaded environment variables from .env file...");
+            }
+        }
+        catch (Exception ex)
+        {
+            // Silently handle .env file loading errors to not disrupt the normal flow
+            Console.WriteLine($"Note: Could not load .env file: {ex.Message}");
+        }
+    }
+
+    /// <summary>
     /// Attempts to load BrickLink credentials from environment variables.
+    /// This includes variables loaded from a .env file or system environment variables.
     /// </summary>
     /// <returns>BrickLink credentials if all required environment variables are present, otherwise null.</returns>
     private static BrickLinkCredentials? GetCredentialsFromEnvironment()
@@ -81,7 +108,7 @@ internal class Program
     private static BrickLinkCredentials GetCredentialsFromUser()
     {
         Console.WriteLine("Please enter your BrickLink API credentials:");
-        Console.WriteLine("(You can also set environment variables: BRICKLINK_CONSUMER_KEY, BRICKLINK_CONSUMER_SECRET, BRICKLINK_TOKEN_VALUE, BRICKLINK_TOKEN_SECRET)");
+        Console.WriteLine("(You can also create a .env file or set environment variables: BRICKLINK_CONSUMER_KEY, BRICKLINK_CONSUMER_SECRET, BRICKLINK_TOKEN_VALUE, BRICKLINK_TOKEN_SECRET)");
         Console.WriteLine();
 
         Console.Write("Consumer Key: ");

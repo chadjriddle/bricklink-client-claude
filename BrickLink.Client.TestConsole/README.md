@@ -14,6 +14,7 @@ The test console serves several key purposes:
 ## Features
 
 - **Credential Input Options**:
+  - `.env` file (recommended for local development)
   - Environment variables (recommended for automation)
   - Interactive console input with masked password entry
 - **Comprehensive Testing**:
@@ -28,7 +29,36 @@ The test console serves several key purposes:
 
 ## Usage
 
-### Option 1: Environment Variables (Recommended)
+### Option 1: .env File (Recommended for Local Development)
+
+Create a `.env` file in the `BrickLink.Client.TestConsole` directory with your BrickLink API credentials:
+
+```bash
+# Copy the example file
+cp .env.example .env
+```
+
+Then edit the `.env` file with your actual credentials:
+
+```env
+# BrickLink API Credentials
+BRICKLINK_CONSUMER_KEY=your_consumer_key_here
+BRICKLINK_CONSUMER_SECRET=your_consumer_secret_here
+BRICKLINK_TOKEN_VALUE=your_token_value_here
+BRICKLINK_TOKEN_SECRET=your_token_secret_here
+```
+
+Run the console application:
+
+```bash
+dotnet run --project BrickLink.Client.TestConsole
+```
+
+The application will automatically load the credentials from the `.env` file.
+
+**Security Note**: The `.env` file is automatically ignored by Git to prevent accidental credential exposure.
+
+### Option 2: Environment Variables (Recommended for CI/CD)
 
 Set the following environment variables with your BrickLink API credentials:
 
@@ -58,9 +88,9 @@ Then run the console application:
 dotnet run --project BrickLink.Client.TestConsole
 ```
 
-### Option 2: Interactive Input
+### Option 3: Interactive Input
 
-Simply run the application without setting environment variables, and it will prompt you to enter your credentials:
+Simply run the application without creating a `.env` file or setting environment variables, and it will prompt you to enter your credentials:
 
 ```bash
 dotnet run --project BrickLink.Client.TestConsole
@@ -82,6 +112,7 @@ When authentication works correctly, you should see output similar to:
 BrickLink API Authentication Test Console
 ========================================
 
+Loaded environment variables from .env file...
 Loading credentials from environment variables...
 Creating authenticated HttpClient...
 HttpClient created successfully with authentication handler.
@@ -173,7 +204,7 @@ To use this test console, you need BrickLink API credentials:
 
 ## Integration with CI/CD
 
-This console application can be used in automated testing pipelines:
+This console application can be used in automated testing pipelines using environment variables:
 
 ```yaml
 # Example GitHub Actions step
@@ -185,6 +216,8 @@ This console application can be used in automated testing pipelines:
     BRICKLINK_TOKEN_VALUE: ${{ secrets.BRICKLINK_TOKEN_VALUE }}
     BRICKLINK_TOKEN_SECRET: ${{ secrets.BRICKLINK_TOKEN_SECRET }}
 ```
+
+For local development, prefer using the `.env` file approach as it's more convenient and secure.
 
 ## Development Notes
 

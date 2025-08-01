@@ -411,6 +411,11 @@ appsettings.Development.json
 secrets.json
 *.secrets
 
+# Environment files with sensitive credentials
+.env
+.env.local
+.env.*.local
+
 # Test results and coverage reports
 TestResults/
 coverage/
