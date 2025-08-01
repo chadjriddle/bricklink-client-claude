@@ -71,7 +71,7 @@ public static class OAuthSignatureGenerator
     /// This follows the OAuth 1.0a specification where:
     /// 1. HTTP method is uppercased
     /// 2. Base URL and parameter string are percent-encoded
-    /// 3. Components are joined with '&amp;' characters
+    /// 3. Components are joined with ampersand characters
     /// </remarks>
     public static string CreateSignatureBaseString(
         string httpMethod,
