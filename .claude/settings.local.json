@@ -44,7 +44,8 @@
       "Bash(dotnet run:*)",
       "Bash(start:*)",
       "WebFetch(domain:www.bricklink.com)",
-      "WebFetch(domain:httpbin.org)"
+      "WebFetch(domain:httpbin.org)",
+      "WebFetch(domain:raw.githubusercontent.com)"
     ],
     "deny": [],
     "defaultMode": "acceptEdits"
