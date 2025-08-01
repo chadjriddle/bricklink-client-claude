@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrickLink.Client", "BrickLi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrickLink.Client.Tests", "BrickLink.Client.Tests\BrickLink.Client.Tests.csproj", "{2BD33B1F-99DE-4D69-89D6-AB262172087A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrickLink.Client.TestConsole", "BrickLink.Client.TestConsole\BrickLink.Client.TestConsole.csproj", "{F01BBFB6-CABB-4864-AF8B-9616FB0F61CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,18 @@ Global
 		{2BD33B1F-99DE-4D69-89D6-AB262172087A}.Release|x64.Build.0 = Release|Any CPU
 		{2BD33B1F-99DE-4D69-89D6-AB262172087A}.Release|x86.ActiveCfg = Release|Any CPU
 		{2BD33B1F-99DE-4D69-89D6-AB262172087A}.Release|x86.Build.0 = Release|Any CPU
+		{F01BBFB6-CABB-4864-AF8B-9616FB0F61CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F01BBFB6-CABB-4864-AF8B-9616FB0F61CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F01BBFB6-CABB-4864-AF8B-9616FB0F61CB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F01BBFB6-CABB-4864-AF8B-9616FB0F61CB}.Debug|x64.Build.0 = Debug|Any CPU
+		{F01BBFB6-CABB-4864-AF8B-9616FB0F61CB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F01BBFB6-CABB-4864-AF8B-9616FB0F61CB}.Debug|x86.Build.0 = Debug|Any CPU
+		{F01BBFB6-CABB-4864-AF8B-9616FB0F61CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F01BBFB6-CABB-4864-AF8B-9616FB0F61CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F01BBFB6-CABB-4864-AF8B-9616FB0F61CB}.Release|x64.ActiveCfg = Release|Any CPU
+		{F01BBFB6-CABB-4864-AF8B-9616FB0F61CB}.Release|x64.Build.0 = Release|Any CPU
+		{F01BBFB6-CABB-4864-AF8B-9616FB0F61CB}.Release|x86.ActiveCfg = Release|Any CPU
+		{F01BBFB6-CABB-4864-AF8B-9616FB0F61CB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

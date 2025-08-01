@@ -107,7 +107,14 @@ public class AuthenticationHandler : DelegatingHandler, IAuthenticationHandler
             .WithVersion(signedParameters["oauth_version"]!)
             .WithSignature(signedParameters["oauth_signature"]!);
 
-        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("OAuth", authHeader.ToString());
+        // The authorization header value (already includes "OAuth" prefix)
+        var headerValue = authHeader.ToString();
+        // Remove the "OAuth " prefix since AuthenticationHeaderValue will add it
+        if (headerValue.StartsWith("OAuth ", StringComparison.OrdinalIgnoreCase))
+        {
+            headerValue = headerValue.Substring(6); // Remove "OAuth "
+        }
+        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("OAuth", headerValue);
 
         return Task.CompletedTask;
     }

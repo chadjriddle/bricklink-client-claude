@@ -1,6 +1,6 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
-    "defaultMode": "acceptEdits",
     "allow": [
       "Bash(dir)",
       "Bash(ls:*)",
@@ -42,8 +42,12 @@
       "WebFetch(domain:docs.anthropic.com)",
       "Bash(start ./TestResults/coveragereport/BrickLink.Client_HttpLoggingHandler.html)",
       "Bash(dotnet run:*)",
-      "Bash(start:*)"
+      "Bash(start:*)",
+      "WebFetch(domain:www.bricklink.com)",
+      "WebFetch(domain:httpbin.org)",
+      "WebFetch(domain:raw.githubusercontent.com)"
     ],
-    "deny": []
+    "deny": [],
+    "defaultMode": "acceptEdits"
   }
 }
