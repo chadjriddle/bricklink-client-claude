@@ -373,3 +373,6 @@ See `docs/BrickLink API Client Specification.md` for complete API specification.
 
 ### Project Coverage Strategy
 - The last few PRs have failed the coverage test, specifically for path coverage, ensure that all code coverage is complete for any changes made
+
+### Commit and PR Guidelines
+- Ensure that code is committed and a PR generated at the end of a task

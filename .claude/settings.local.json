@@ -16,6 +16,11 @@
       "Bash(reportgenerator:*)",
       "Bash(git pull:*)",
       "Bash(git checkout:*)",
+      "Bash(git commit:*)",
+      "Bash(git merge:*)",
+      "Bash(git status:*)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
       "Bash(dotnet new:*)",
       "Bash(dotnet sln:*)",
       "Bash(dotnet build)",
@@ -35,7 +40,8 @@
       "Bash(powershell:*)",
       "WebFetch(domain:docs.anthropic.com)",
       "Bash(start ./TestResults/coveragereport/BrickLink.Client_HttpLoggingHandler.html)",
-      "Bash(dotnet run:*)"
+      "Bash(dotnet run:*)",
+      "Bash(start:*)"
     ],
     "deny": []
   }
