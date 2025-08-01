@@ -67,13 +67,13 @@ internal class Program
             // First, try to find .env file in the application's directory (where the exe is located)
             var appDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             var envFilePath = Path.Combine(appDirectory ?? "", ".env");
-            
+
             // If not found in app directory, try the current working directory
             if (!File.Exists(envFilePath))
             {
                 envFilePath = Path.Combine(Directory.GetCurrentDirectory(), ".env");
             }
-            
+
             // If still not found, try looking in the project source directory
             if (!File.Exists(envFilePath))
             {
@@ -88,7 +88,7 @@ internal class Program
                     }
                 }
             }
-            
+
             if (File.Exists(envFilePath))
             {
                 Env.Load(envFilePath);
@@ -138,9 +138,9 @@ internal class Program
         }
 
         Console.WriteLine("Loading credentials from environment variables...");
-        Console.WriteLine($"Consumer Key: {consumerKey?.Substring(0, Math.Min(8, consumerKey.Length))}...");
-        Console.WriteLine($"Token Value: {tokenValue?.Substring(0, Math.Min(8, tokenValue.Length))}...");
-        return new BrickLinkCredentials(consumerKey, consumerSecret, tokenValue, tokenSecret);
+        Console.WriteLine($"Consumer Key: {consumerKey.Substring(0, Math.Min(8, consumerKey.Length))}...");
+        Console.WriteLine($"Token Value: {tokenValue.Substring(0, Math.Min(8, tokenValue.Length))}...");
+        return new BrickLinkCredentials(consumerKey!, consumerSecret!, tokenValue!, tokenSecret!);
     }
 
     /// <summary>
