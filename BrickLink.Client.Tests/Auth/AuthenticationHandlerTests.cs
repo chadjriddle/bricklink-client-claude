@@ -16,6 +16,9 @@ public class AuthenticationHandlerTests : IDisposable
     private const string ValidAccessToken = "test-access-token";
     private const string ValidAccessTokenSecret = "test-access-token-secret";
 
+    private static readonly string OAuthSignatureRegexPattern = @"oauth_signature=""([^""]+)""";
+    private static readonly string NonceRegexPattern = @"oauth_nonce=""([^""]+)""";
+
     private readonly BrickLinkCredentials _validCredentials;
     private readonly Mock<HttpMessageHandler> _mockInnerHandler;
     private AuthenticationHandler? _authHandler;
@@ -137,7 +140,7 @@ public class AuthenticationHandlerTests : IDisposable
         Assert.Contains("oauth_signature", authHeaderValue);
 
         // Extract signature value to ensure it's not empty
-        var signatureMatch = System.Text.RegularExpressions.Regex.Match(authHeaderValue, @"oauth_signature=""([^""]+)""");
+        var signatureMatch = System.Text.RegularExpressions.Regex.Match(authHeaderValue, OAuthSignatureRegexPattern);
         Assert.True(signatureMatch.Success);
         Assert.NotEmpty(signatureMatch.Groups[1].Value);
     }
@@ -208,8 +211,8 @@ public class AuthenticationHandlerTests : IDisposable
         var auth2 = request2.Headers.Authorization!.Parameter!;
 
         // Extract nonce values using regex
-        var nonce1Match = System.Text.RegularExpressions.Regex.Match(auth1, @"oauth_nonce=""([^""]+)""");
-        var nonce2Match = System.Text.RegularExpressions.Regex.Match(auth2, @"oauth_nonce=""([^""]+)""");
+        var nonce1Match = System.Text.RegularExpressions.Regex.Match(auth1, NonceRegexPattern);
+        var nonce2Match = System.Text.RegularExpressions.Regex.Match(auth2, NonceRegexPattern);
 
         Assert.True(nonce1Match.Success);
         Assert.True(nonce2Match.Success);
@@ -320,7 +323,7 @@ public class AuthenticationHandlerTests : IDisposable
         // This is tested indirectly by ensuring the signature is generated successfully
         // If the base URL parsing were incorrect, the signature generation would fail or be invalid
         var authHeaderValue = request.Headers.Authorization.Parameter!;
-        var signatureMatch = System.Text.RegularExpressions.Regex.Match(authHeaderValue, @"oauth_signature=""([^""]+)""");
+        var signatureMatch = System.Text.RegularExpressions.Regex.Match(authHeaderValue, OAuthSignatureRegexPattern);
         Assert.True(signatureMatch.Success);
         Assert.NotEmpty(signatureMatch.Groups[1].Value);
     }
@@ -342,7 +345,7 @@ public class AuthenticationHandlerTests : IDisposable
 
         Assert.NotNull(request.Headers.Authorization);
         var authHeaderValue = request.Headers.Authorization.Parameter!;
-        var signatureMatch = System.Text.RegularExpressions.Regex.Match(authHeaderValue, @"oauth_signature=""([^""]+)""");
+        var signatureMatch = System.Text.RegularExpressions.Regex.Match(authHeaderValue, OAuthSignatureRegexPattern);
         Assert.True(signatureMatch.Success, $"Failed to generate signature for URL: {requestUrl}");
         Assert.NotEmpty(signatureMatch.Groups[1].Value);
     }
@@ -373,6 +376,66 @@ public class AuthenticationHandlerTests : IDisposable
         // Act & Assert - Should not throw
         _authHandler.Dispose();
         _authHandler.Dispose();
+    }
+
+    [Fact]
+    public void Dispose_WithInnerHandler_DisposesCorrectly()
+    {
+        // Arrange
+        _authHandler = new AuthenticationHandler(_validCredentials, _mockInnerHandler.Object);
+
+        // Act & Assert - Should not throw
+        _authHandler.Dispose();
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("key1=")]
+    [InlineData("key1=value1&key2=")]
+    [InlineData("key1&key2=value2")]
+    [InlineData("=value")]
+    public async Task AuthenticateRequestAsync_WithVariousQueryParameterFormats_HandlesCorrectly(string queryString)
+    {
+        // Arrange
+        _authHandler = new AuthenticationHandler(_validCredentials);
+        var url = $"https://api.bricklink.com/api/v1/test?{queryString}";
+        var request = new HttpRequestMessage(HttpMethod.Get, url);
+
+        // Act & Assert - Should not throw and should generate valid signature
+        await _authHandler.AuthenticateRequestAsync(request);
+
+        Assert.NotNull(request.Headers.Authorization);
+        Assert.Equal("OAuth", request.Headers.Authorization.Scheme);
+
+        var authHeaderValue = request.Headers.Authorization.Parameter!;
+        var signatureMatch = System.Text.RegularExpressions.Regex.Match(authHeaderValue, OAuthSignatureRegexPattern);
+        Assert.True(signatureMatch.Success, $"Failed to generate signature for query string: {queryString}");
+        Assert.NotEmpty(signatureMatch.Groups[1].Value);
+    }
+
+    [Theory]
+    [InlineData("PUT")]
+    [InlineData("DELETE")]
+    [InlineData("PATCH")]
+    [InlineData("HEAD")]
+    [InlineData("OPTIONS")]
+    public async Task AuthenticateRequestAsync_WithDifferentHttpMethods_GeneratesCorrectSignature(string httpMethod)
+    {
+        // Arrange
+        _authHandler = new AuthenticationHandler(_validCredentials);
+        var request = new HttpRequestMessage(new HttpMethod(httpMethod), "https://api.bricklink.com/api/v1/test");
+
+        // Act
+        await _authHandler.AuthenticateRequestAsync(request);
+
+        // Assert
+        Assert.NotNull(request.Headers.Authorization);
+        Assert.Equal("OAuth", request.Headers.Authorization.Scheme);
+
+        var authHeaderValue = request.Headers.Authorization.Parameter!;
+        var signatureMatch = System.Text.RegularExpressions.Regex.Match(authHeaderValue, OAuthSignatureRegexPattern);
+        Assert.True(signatureMatch.Success, $"Failed to generate signature for HTTP method: {httpMethod}");
+        Assert.NotEmpty(signatureMatch.Groups[1].Value);
     }
 
     #endregion

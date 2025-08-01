@@ -71,7 +71,7 @@ public class AuthenticationHandler : DelegatingHandler, IAuthenticationHandler
         return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
     }
 
-    private async Task AuthenticateRequestCoreAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    private Task AuthenticateRequestCoreAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         // Extract the base URL (without query parameters)
         var baseUrl = GetBaseUrl(request.RequestUri);
@@ -109,7 +109,7 @@ public class AuthenticationHandler : DelegatingHandler, IAuthenticationHandler
 
         request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("OAuth", authHeader.ToString());
 
-        await Task.CompletedTask.ConfigureAwait(false);
+        return Task.CompletedTask;
     }
 
     private static string GetBaseUrl(Uri? requestUri)
