@@ -16,7 +16,7 @@ public class CompletenessConverter : JsonConverter<Completeness>
         { Completeness.Sealed, "S" }
     };
 
-    private static readonly Dictionary<string, Completeness> StringToEnum = 
+    private static readonly Dictionary<string, Completeness> StringToEnum =
         EnumToString.ToDictionary(kvp => kvp.Value, kvp => kvp.Key);
 
     /// <summary>

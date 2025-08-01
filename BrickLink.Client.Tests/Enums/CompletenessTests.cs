@@ -122,4 +122,34 @@ public class CompletenessTests
                 break;
         }
     }
+
+    [Fact]
+    public void Completeness_DeserializesFromNullToken_ThrowsJsonException()
+    {
+        // Arrange
+        var json = "null";
+
+        // Act & Assert
+        Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<Completeness>(json, JsonSerializationHelper.DefaultOptions));
+    }
+
+    [Fact]
+    public void Completeness_DeserializesFromNumberToken_ThrowsJsonException()
+    {
+        // Arrange
+        var json = "123";
+
+        // Act & Assert
+        Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<Completeness>(json, JsonSerializationHelper.DefaultOptions));
+    }
+
+    [Fact]
+    public void Completeness_SerializesInvalidEnumValue_ThrowsJsonException()
+    {
+        // Arrange - cast an invalid integer to Completeness
+        var invalidCompleteness = (Completeness)999;
+
+        // Act & Assert
+        Assert.Throws<JsonException>(() => JsonSerializer.Serialize(invalidCompleteness, JsonSerializationHelper.DefaultOptions));
+    }
 }

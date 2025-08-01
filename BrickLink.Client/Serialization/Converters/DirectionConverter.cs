@@ -15,7 +15,7 @@ public class DirectionConverter : JsonConverter<Direction>
         { Direction.Out, "out" }
     };
 
-    private static readonly Dictionary<string, Direction> StringToEnum = 
+    private static readonly Dictionary<string, Direction> StringToEnum =
         EnumToString.ToDictionary(kvp => kvp.Value, kvp => kvp.Key);
 
     /// <summary>

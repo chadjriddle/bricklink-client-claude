@@ -112,4 +112,34 @@ public class DirectionTests
                 break;
         }
     }
+
+    [Fact]
+    public void Direction_DeserializesFromNullToken_ThrowsJsonException()
+    {
+        // Arrange
+        var json = "null";
+
+        // Act & Assert
+        Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<Direction>(json, JsonSerializationHelper.DefaultOptions));
+    }
+
+    [Fact]
+    public void Direction_DeserializesFromNumberToken_ThrowsJsonException()
+    {
+        // Arrange
+        var json = "123";
+
+        // Act & Assert
+        Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<Direction>(json, JsonSerializationHelper.DefaultOptions));
+    }
+
+    [Fact]
+    public void Direction_SerializesInvalidEnumValue_ThrowsJsonException()
+    {
+        // Arrange - cast an invalid integer to Direction
+        var invalidDirection = (Direction)999;
+
+        // Act & Assert
+        Assert.Throws<JsonException>(() => JsonSerializer.Serialize(invalidDirection, JsonSerializationHelper.DefaultOptions));
+    }
 }

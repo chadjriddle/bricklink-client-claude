@@ -22,7 +22,7 @@ public class ItemTypeConverter : JsonConverter<ItemType>
         { ItemType.OriginalBox, "ORIGINAL_BOX" }
     };
 
-    private static readonly Dictionary<string, ItemType> StringToEnum = 
+    private static readonly Dictionary<string, ItemType> StringToEnum =
         EnumToString.ToDictionary(kvp => kvp.Value, kvp => kvp.Key);
 
     /// <summary>

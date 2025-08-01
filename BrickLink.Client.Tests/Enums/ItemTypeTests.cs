@@ -99,4 +99,34 @@ public class ItemTypeTests
             Assert.Equal(itemType, deserialized);
         }
     }
+
+    [Fact]
+    public void ItemType_DeserializesFromNullToken_ThrowsJsonException()
+    {
+        // Arrange
+        var json = "null";
+
+        // Act & Assert
+        Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<ItemType>(json, JsonSerializationHelper.DefaultOptions));
+    }
+
+    [Fact]
+    public void ItemType_DeserializesFromNumberToken_ThrowsJsonException()
+    {
+        // Arrange
+        var json = "123";
+
+        // Act & Assert
+        Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<ItemType>(json, JsonSerializationHelper.DefaultOptions));
+    }
+
+    [Fact]
+    public void ItemType_SerializesInvalidEnumValue_ThrowsJsonException()
+    {
+        // Arrange - cast an invalid integer to ItemType
+        var invalidItemType = (ItemType)999;
+
+        // Act & Assert
+        Assert.Throws<JsonException>(() => JsonSerializer.Serialize(invalidItemType, JsonSerializationHelper.DefaultOptions));
+    }
 }

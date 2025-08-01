@@ -15,7 +15,7 @@ public class NewOrUsedConverter : JsonConverter<NewOrUsed>
         { NewOrUsed.Used, "U" }
     };
 
-    private static readonly Dictionary<string, NewOrUsed> StringToEnum = 
+    private static readonly Dictionary<string, NewOrUsed> StringToEnum =
         EnumToString.ToDictionary(kvp => kvp.Value, kvp => kvp.Key);
 
     /// <summary>

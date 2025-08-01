@@ -88,4 +88,34 @@ public class NewOrUsedTests
         Assert.Equal("New", NewOrUsed.New.ToString());
         Assert.Equal("Used", NewOrUsed.Used.ToString());
     }
+
+    [Fact]
+    public void NewOrUsed_DeserializesFromNullToken_ThrowsJsonException()
+    {
+        // Arrange
+        var json = "null";
+
+        // Act & Assert
+        Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<NewOrUsed>(json, JsonSerializationHelper.DefaultOptions));
+    }
+
+    [Fact]
+    public void NewOrUsed_DeserializesFromNumberToken_ThrowsJsonException()
+    {
+        // Arrange
+        var json = "123";
+
+        // Act & Assert
+        Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<NewOrUsed>(json, JsonSerializationHelper.DefaultOptions));
+    }
+
+    [Fact]
+    public void NewOrUsed_SerializesInvalidEnumValue_ThrowsJsonException()
+    {
+        // Arrange - cast an invalid integer to NewOrUsed
+        var invalidCondition = (NewOrUsed)999;
+
+        // Act & Assert
+        Assert.Throws<JsonException>(() => JsonSerializer.Serialize(invalidCondition, JsonSerializationHelper.DefaultOptions));
+    }
 }

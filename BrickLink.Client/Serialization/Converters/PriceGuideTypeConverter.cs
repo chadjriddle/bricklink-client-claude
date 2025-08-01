@@ -15,7 +15,7 @@ public class PriceGuideTypeConverter : JsonConverter<PriceGuideType>
         { PriceGuideType.Sold, "sold" }
     };
 
-    private static readonly Dictionary<string, PriceGuideType> StringToEnum = 
+    private static readonly Dictionary<string, PriceGuideType> StringToEnum =
         EnumToString.ToDictionary(kvp => kvp.Value, kvp => kvp.Key);
 
     /// <summary>

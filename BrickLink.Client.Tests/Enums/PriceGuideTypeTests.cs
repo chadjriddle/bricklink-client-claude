@@ -114,4 +114,34 @@ public class PriceGuideTypeTests
                 break;
         }
     }
+
+    [Fact]
+    public void PriceGuideType_DeserializesFromNullToken_ThrowsJsonException()
+    {
+        // Arrange
+        var json = "null";
+
+        // Act & Assert
+        Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<PriceGuideType>(json, JsonSerializationHelper.DefaultOptions));
+    }
+
+    [Fact]
+    public void PriceGuideType_DeserializesFromNumberToken_ThrowsJsonException()
+    {
+        // Arrange
+        var json = "123";
+
+        // Act & Assert
+        Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<PriceGuideType>(json, JsonSerializationHelper.DefaultOptions));
+    }
+
+    [Fact]
+    public void PriceGuideType_SerializesInvalidEnumValue_ThrowsJsonException()
+    {
+        // Arrange - cast an invalid integer to PriceGuideType
+        var invalidGuideType = (PriceGuideType)999;
+
+        // Act & Assert
+        Assert.Throws<JsonException>(() => JsonSerializer.Serialize(invalidGuideType, JsonSerializationHelper.DefaultOptions));
+    }
 }
