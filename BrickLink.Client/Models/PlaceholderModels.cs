@@ -4,27 +4,6 @@
 namespace BrickLink.Client.Models;
 
 /// <summary>
-/// Placeholder for CatalogItem model. Will be fully implemented in Milestone 4.
-/// </summary>
-public class CatalogItem
-{
-}
-
-/// <summary>
-/// Placeholder for Color model. Will be fully implemented in Milestone 4.
-/// </summary>
-public class Color
-{
-}
-
-/// <summary>
-/// Placeholder for Category model. Will be fully implemented in Milestone 4.
-/// </summary>
-public class Category
-{
-}
-
-/// <summary>
 /// Placeholder for KnownColor model. Will be fully implemented in Milestone 4.
 /// </summary>
 public class KnownColor
