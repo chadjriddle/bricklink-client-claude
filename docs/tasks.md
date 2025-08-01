@@ -194,6 +194,14 @@ The project foundation is now production-ready with automated quality assurance,
 - [ ] Add authentication handler to client pipeline
 - [ ] Implement credential injection patterns
 
+### 3.8 Authentication Integration Test Console Application
+- [ ] Create simple console application project for authentication testing
+- [ ] Implement basic HttpClient with authentication handler integration
+- [ ] Test OAuth signature generation and header construction with real credentials
+- [ ] Make simple authenticated request to BrickLink API (e.g., GET /api/v1/colors)
+- [ ] Validate authentication headers are correctly applied and API responds successfully
+- [ ] Document console app usage for authentication verification
+
 ## Milestone 4: Data Models
 
 ### 4.1 Core Enumerations
