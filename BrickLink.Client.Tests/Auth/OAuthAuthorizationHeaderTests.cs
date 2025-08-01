@@ -68,20 +68,21 @@ public class OAuthAuthorizationHeaderTests
             header.WithConsumerKey(null!));
 
         Assert.Equal("consumerKey", exception.ParamName);
-        Assert.Contains("Consumer key cannot be null or empty", exception.Message);
+        Assert.Contains("Consumer key cannot be null", exception.Message);
     }
 
     [Fact]
-    public void WithConsumerKey_EmptyKey_ThrowsArgumentNullException()
+    public void WithConsumerKey_EmptyKey_ThrowsArgumentException()
     {
         // Arrange
         var header = new OAuthAuthorizationHeader();
 
         // Act & Assert
-        var exception = Assert.Throws<ArgumentNullException>(() =>
+        var exception = Assert.Throws<ArgumentException>(() =>
             header.WithConsumerKey(""));
 
         Assert.Equal("consumerKey", exception.ParamName);
+        Assert.Contains("Consumer key cannot be empty or whitespace", exception.Message);
     }
 
     [Fact]
@@ -109,7 +110,7 @@ public class OAuthAuthorizationHeaderTests
             header.WithAccessToken(null!));
 
         Assert.Equal("accessToken", exception.ParamName);
-        Assert.Contains("Access token cannot be null or empty", exception.Message);
+        Assert.Contains("Access token cannot be null", exception.Message);
     }
 
     [Fact]
@@ -137,7 +138,7 @@ public class OAuthAuthorizationHeaderTests
             header.WithSignatureMethod(null!));
 
         Assert.Equal("signatureMethod", exception.ParamName);
-        Assert.Contains("Signature method cannot be null or empty", exception.Message);
+        Assert.Contains("Signature method cannot be null", exception.Message);
     }
 
     [Fact]
@@ -165,7 +166,7 @@ public class OAuthAuthorizationHeaderTests
             header.WithTimestamp(null!));
 
         Assert.Equal("timestamp", exception.ParamName);
-        Assert.Contains("Timestamp cannot be null or empty", exception.Message);
+        Assert.Contains("Timestamp cannot be null", exception.Message);
     }
 
     [Fact]
@@ -193,7 +194,7 @@ public class OAuthAuthorizationHeaderTests
             header.WithNonce(null!));
 
         Assert.Equal("nonce", exception.ParamName);
-        Assert.Contains("Nonce cannot be null or empty", exception.Message);
+        Assert.Contains("Nonce cannot be null", exception.Message);
     }
 
     [Fact]
@@ -221,7 +222,7 @@ public class OAuthAuthorizationHeaderTests
             header.WithVersion(null!));
 
         Assert.Equal("version", exception.ParamName);
-        Assert.Contains("Version cannot be null or empty", exception.Message);
+        Assert.Contains("Version cannot be null", exception.Message);
     }
 
     [Fact]
@@ -249,7 +250,7 @@ public class OAuthAuthorizationHeaderTests
             header.WithSignature(null!));
 
         Assert.Equal("signature", exception.ParamName);
-        Assert.Contains("Signature cannot be null or empty", exception.Message);
+        Assert.Contains("Signature cannot be null", exception.Message);
     }
 
     [Fact]
@@ -603,27 +604,29 @@ public class OAuthAuthorizationHeaderTests
             OAuthAuthorizationHeader.Parse(null!));
 
         Assert.Equal("headerValue", exception.ParamName);
-        Assert.Contains("Header value cannot be null or empty", exception.Message);
+        Assert.Contains("Header value cannot be null", exception.Message);
     }
 
     [Fact]
-    public void Parse_EmptyHeaderValue_ThrowsArgumentNullException()
+    public void Parse_EmptyHeaderValue_ThrowsArgumentException()
     {
         // Act & Assert
-        var exception = Assert.Throws<ArgumentNullException>(() =>
+        var exception = Assert.Throws<ArgumentException>(() =>
             OAuthAuthorizationHeader.Parse(""));
 
         Assert.Equal("headerValue", exception.ParamName);
+        Assert.Contains("Header value cannot be empty or whitespace", exception.Message);
     }
 
     [Fact]
-    public void Parse_WhitespaceHeaderValue_ThrowsArgumentNullException()
+    public void Parse_WhitespaceHeaderValue_ThrowsArgumentException()
     {
         // Act & Assert
-        var exception = Assert.Throws<ArgumentNullException>(() =>
+        var exception = Assert.Throws<ArgumentException>(() =>
             OAuthAuthorizationHeader.Parse("   "));
 
         Assert.Equal("headerValue", exception.ParamName);
+        Assert.Contains("Header value cannot be empty or whitespace", exception.Message);
     }
 
     [Fact]
@@ -722,18 +725,35 @@ public class OAuthAuthorizationHeaderTests
     [InlineData("\t")]
     [InlineData("\n")]
     [InlineData("\r\n")]
-    public void WithMethods_WhitespaceValues_ThrowArgumentNullException(string whitespaceValue)
+    public void WithMethods_WhitespaceValues_ThrowArgumentException(string whitespaceValue)
     {
         // Arrange
         var header = new OAuthAuthorizationHeader();
 
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => header.WithConsumerKey(whitespaceValue));
-        Assert.Throws<ArgumentNullException>(() => header.WithAccessToken(whitespaceValue));
-        Assert.Throws<ArgumentNullException>(() => header.WithSignatureMethod(whitespaceValue));
-        Assert.Throws<ArgumentNullException>(() => header.WithTimestamp(whitespaceValue));
-        Assert.Throws<ArgumentNullException>(() => header.WithNonce(whitespaceValue));
-        Assert.Throws<ArgumentNullException>(() => header.WithVersion(whitespaceValue));
-        Assert.Throws<ArgumentNullException>(() => header.WithSignature(whitespaceValue));
+        Assert.Throws<ArgumentException>(() => header.WithConsumerKey(whitespaceValue));
+        Assert.Throws<ArgumentException>(() => header.WithAccessToken(whitespaceValue));
+        Assert.Throws<ArgumentException>(() => header.WithSignatureMethod(whitespaceValue));
+        Assert.Throws<ArgumentException>(() => header.WithTimestamp(whitespaceValue));
+        Assert.Throws<ArgumentException>(() => header.WithNonce(whitespaceValue));
+        Assert.Throws<ArgumentException>(() => header.WithVersion(whitespaceValue));
+        Assert.Throws<ArgumentException>(() => header.WithSignature(whitespaceValue));
+    }
+
+    [Fact]
+    public void WithMethods_EmptyString_ThrowsArgumentException()
+    {
+        // Arrange
+        var header = new OAuthAuthorizationHeader();
+        var emptyString = "";
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => header.WithConsumerKey(emptyString));
+        Assert.Throws<ArgumentException>(() => header.WithAccessToken(emptyString));
+        Assert.Throws<ArgumentException>(() => header.WithSignatureMethod(emptyString));
+        Assert.Throws<ArgumentException>(() => header.WithTimestamp(emptyString));
+        Assert.Throws<ArgumentException>(() => header.WithNonce(emptyString));
+        Assert.Throws<ArgumentException>(() => header.WithVersion(emptyString));
+        Assert.Throws<ArgumentException>(() => header.WithSignature(emptyString));
     }
 }

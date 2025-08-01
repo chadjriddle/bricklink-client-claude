@@ -10,6 +10,7 @@ namespace BrickLink.Client.Auth;
 /// </summary>
 public class OAuthAuthorizationHeader
 {
+    private static readonly Regex _parameterRegex = new(@"(\w+)=""([^""]*)\""\s*(?:,\s*)?", RegexOptions.Compiled);
     private readonly OAuthParameterCollection _parameters;
 
     /// <summary>
@@ -41,11 +42,14 @@ public class OAuthAuthorizationHeader
     /// </summary>
     /// <param name="consumerKey">The OAuth consumer key.</param>
     /// <returns>The current instance for method chaining.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="consumerKey"/> is null or empty.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="consumerKey"/> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="consumerKey"/> is empty or whitespace.</exception>
     public OAuthAuthorizationHeader WithConsumerKey(string consumerKey)
     {
+        if (consumerKey == null)
+            throw new ArgumentNullException(nameof(consumerKey), "Consumer key cannot be null.");
         if (string.IsNullOrWhiteSpace(consumerKey))
-            throw new ArgumentNullException(nameof(consumerKey), "Consumer key cannot be null or empty.");
+            throw new ArgumentException("Consumer key cannot be empty or whitespace.", nameof(consumerKey));
 
         _parameters.SetConsumerKey(consumerKey);
         return this;
@@ -56,11 +60,14 @@ public class OAuthAuthorizationHeader
     /// </summary>
     /// <param name="accessToken">The OAuth access token.</param>
     /// <returns>The current instance for method chaining.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="accessToken"/> is null or empty.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="accessToken"/> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="accessToken"/> is empty or whitespace.</exception>
     public OAuthAuthorizationHeader WithAccessToken(string accessToken)
     {
+        if (accessToken == null)
+            throw new ArgumentNullException(nameof(accessToken), "Access token cannot be null.");
         if (string.IsNullOrWhiteSpace(accessToken))
-            throw new ArgumentNullException(nameof(accessToken), "Access token cannot be null or empty.");
+            throw new ArgumentException("Access token cannot be empty or whitespace.", nameof(accessToken));
 
         _parameters.SetAccessToken(accessToken);
         return this;
@@ -71,11 +78,14 @@ public class OAuthAuthorizationHeader
     /// </summary>
     /// <param name="signatureMethod">The OAuth signature method (typically "HMAC-SHA1").</param>
     /// <returns>The current instance for method chaining.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="signatureMethod"/> is null or empty.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="signatureMethod"/> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="signatureMethod"/> is empty or whitespace.</exception>
     public OAuthAuthorizationHeader WithSignatureMethod(string signatureMethod)
     {
+        if (signatureMethod == null)
+            throw new ArgumentNullException(nameof(signatureMethod), "Signature method cannot be null.");
         if (string.IsNullOrWhiteSpace(signatureMethod))
-            throw new ArgumentNullException(nameof(signatureMethod), "Signature method cannot be null or empty.");
+            throw new ArgumentException("Signature method cannot be empty or whitespace.", nameof(signatureMethod));
 
         _parameters.SetSignatureMethod(signatureMethod);
         return this;
@@ -86,11 +96,14 @@ public class OAuthAuthorizationHeader
     /// </summary>
     /// <param name="timestamp">The OAuth timestamp.</param>
     /// <returns>The current instance for method chaining.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="timestamp"/> is null or empty.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="timestamp"/> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="timestamp"/> is empty or whitespace.</exception>
     public OAuthAuthorizationHeader WithTimestamp(string timestamp)
     {
+        if (timestamp == null)
+            throw new ArgumentNullException(nameof(timestamp), "Timestamp cannot be null.");
         if (string.IsNullOrWhiteSpace(timestamp))
-            throw new ArgumentNullException(nameof(timestamp), "Timestamp cannot be null or empty.");
+            throw new ArgumentException("Timestamp cannot be empty or whitespace.", nameof(timestamp));
 
         _parameters.SetTimestamp(timestamp);
         return this;
@@ -101,11 +114,14 @@ public class OAuthAuthorizationHeader
     /// </summary>
     /// <param name="nonce">The OAuth nonce.</param>
     /// <returns>The current instance for method chaining.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="nonce"/> is null or empty.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="nonce"/> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="nonce"/> is empty or whitespace.</exception>
     public OAuthAuthorizationHeader WithNonce(string nonce)
     {
+        if (nonce == null)
+            throw new ArgumentNullException(nameof(nonce), "Nonce cannot be null.");
         if (string.IsNullOrWhiteSpace(nonce))
-            throw new ArgumentNullException(nameof(nonce), "Nonce cannot be null or empty.");
+            throw new ArgumentException("Nonce cannot be empty or whitespace.", nameof(nonce));
 
         _parameters.SetNonce(nonce);
         return this;
@@ -116,11 +132,14 @@ public class OAuthAuthorizationHeader
     /// </summary>
     /// <param name="version">The OAuth version (typically "1.0").</param>
     /// <returns>The current instance for method chaining.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="version"/> is null or empty.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="version"/> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="version"/> is empty or whitespace.</exception>
     public OAuthAuthorizationHeader WithVersion(string version)
     {
+        if (version == null)
+            throw new ArgumentNullException(nameof(version), "Version cannot be null.");
         if (string.IsNullOrWhiteSpace(version))
-            throw new ArgumentNullException(nameof(version), "Version cannot be null or empty.");
+            throw new ArgumentException("Version cannot be empty or whitespace.", nameof(version));
 
         _parameters.SetVersion(version);
         return this;
@@ -131,11 +150,14 @@ public class OAuthAuthorizationHeader
     /// </summary>
     /// <param name="signature">The OAuth signature.</param>
     /// <returns>The current instance for method chaining.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="signature"/> is null or empty.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="signature"/> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="signature"/> is empty or whitespace.</exception>
     public OAuthAuthorizationHeader WithSignature(string signature)
     {
+        if (signature == null)
+            throw new ArgumentNullException(nameof(signature), "Signature cannot be null.");
         if (string.IsNullOrWhiteSpace(signature))
-            throw new ArgumentNullException(nameof(signature), "Signature cannot be null or empty.");
+            throw new ArgumentException("Signature cannot be empty or whitespace.", nameof(signature));
 
         _parameters.SetSignature(signature);
         return this;
@@ -211,12 +233,14 @@ public class OAuthAuthorizationHeader
     /// </summary>
     /// <param name="headerValue">The Authorization header value to parse.</param>
     /// <returns>An OAuthAuthorizationHeader instance populated with the parsed parameters.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="headerValue"/> is null or empty.</exception>
-    /// <exception cref="ArgumentException">Thrown when <paramref name="headerValue"/> is not a valid OAuth header.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="headerValue"/> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="headerValue"/> is empty, whitespace, or not a valid OAuth header.</exception>
     public static OAuthAuthorizationHeader Parse(string headerValue)
     {
+        if (headerValue == null)
+            throw new ArgumentNullException(nameof(headerValue), "Header value cannot be null.");
         if (string.IsNullOrWhiteSpace(headerValue))
-            throw new ArgumentNullException(nameof(headerValue), "Header value cannot be null or empty.");
+            throw new ArgumentException("Header value cannot be empty or whitespace.", nameof(headerValue));
 
         if (!headerValue.StartsWith("OAuth ", StringComparison.OrdinalIgnoreCase))
             throw new ArgumentException("Header value must start with 'OAuth '", nameof(headerValue));
@@ -225,8 +249,7 @@ public class OAuthAuthorizationHeader
         var oauthParams = headerValue.Substring(6); // Remove "OAuth " prefix
 
         // Parse OAuth parameters using regex to handle quoted values
-        var parameterRegex = new Regex(@"(\w+)=""([^""]*)""\s*(?:,\s*)?", RegexOptions.Compiled);
-        var matches = parameterRegex.Matches(oauthParams);
+        var matches = _parameterRegex.Matches(oauthParams);
 
         foreach (Match match in matches)
         {
