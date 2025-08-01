@@ -39,7 +39,7 @@ public class ServiceCollectionExtensionsTests
 
         // Assert
         var serviceProvider = services.BuildServiceProvider();
-        
+
         var credentials = serviceProvider.GetService<BrickLinkCredentials>();
         var authHandler = serviceProvider.GetService<IAuthenticationHandler>();
         var authHandlerConcrete = serviceProvider.GetService<AuthenticationHandler>();
@@ -83,7 +83,7 @@ public class ServiceCollectionExtensionsTests
 
         // Assert
         var serviceProvider = services.BuildServiceProvider();
-        
+
         var authHandler = serviceProvider.GetService<IAuthenticationHandler>();
         var authHandlerConcrete = serviceProvider.GetService<AuthenticationHandler>();
 
@@ -119,9 +119,9 @@ public class ServiceCollectionExtensionsTests
         // Assert
         var serviceProvider = services.BuildServiceProvider();
         var httpClientFactory = serviceProvider.GetService<IHttpClientFactory>();
-        
+
         Assert.NotNull(httpClientFactory);
-        
+
         var httpClient = httpClientFactory.CreateClient("BrickLinkApi");
         Assert.NotNull(httpClient);
         Assert.NotNull(httpClient.BaseAddress);
@@ -141,7 +141,7 @@ public class ServiceCollectionExtensionsTests
         var serviceProvider = services.BuildServiceProvider();
         var httpClientFactory = serviceProvider.GetService<IHttpClientFactory>();
         var httpClient = httpClientFactory?.CreateClient("BrickLinkApi");
-        
+
         Assert.NotNull(httpClient);
         Assert.Equal(new Uri(customBaseUrl), httpClient.BaseAddress);
     }
@@ -180,9 +180,9 @@ public class ServiceCollectionExtensionsTests
         // Assert
         var serviceProvider = services.BuildServiceProvider();
         var httpClientFactory = serviceProvider.GetService<IHttpClientFactory>();
-        
+
         Assert.NotNull(httpClientFactory);
-        
+
         var httpClient = httpClientFactory.CreateClient("BrickLinkApi");
         Assert.NotNull(httpClient);
         Assert.NotNull(httpClient.BaseAddress);
@@ -204,9 +204,9 @@ public class ServiceCollectionExtensionsTests
         // Assert
         var serviceProvider = services.BuildServiceProvider();
         var httpClientFactory = serviceProvider.GetService<IHttpClientFactory>();
-        
+
         Assert.NotNull(httpClientFactory);
-        
+
         var httpClient = httpClientFactory.CreateClient("BrickLinkApi");
         Assert.NotNull(httpClient);
         Assert.NotNull(httpClient.BaseAddress);
@@ -249,7 +249,7 @@ public class ServiceCollectionExtensionsTests
 
         // Assert
         var serviceProvider = services.BuildServiceProvider();
-        
+
         var credentials = serviceProvider.GetService<BrickLinkCredentials>();
         var authHandler = serviceProvider.GetService<IAuthenticationHandler>();
         var options = serviceProvider.GetService<IOptions<BrickLinkAuthenticationOptions>>();
@@ -297,9 +297,9 @@ public class ServiceCollectionExtensionsTests
         // Assert
         var serviceProvider = services.BuildServiceProvider();
         var httpClientFactory = serviceProvider.GetService<IHttpClientFactory>();
-        
+
         Assert.NotNull(httpClientFactory);
-        
+
         var httpClient = httpClientFactory.CreateClient("BrickLinkApi");
         Assert.NotNull(httpClient);
         Assert.NotNull(httpClient.BaseAddress);
@@ -318,9 +318,9 @@ public class ServiceCollectionExtensionsTests
         // Assert
         var serviceProvider = services.BuildServiceProvider();
         var httpClientFactory = serviceProvider.GetService<IHttpClientFactory>();
-        
+
         Assert.NotNull(httpClientFactory);
-        
+
         var httpClient = httpClientFactory.CreateClient("BrickLinkApi");
         Assert.NotNull(httpClient);
     }
@@ -340,7 +340,7 @@ public class ServiceCollectionExtensionsTests
 
         // Assert
         var serviceProvider = services.BuildServiceProvider();
-        
+
         var credentials1 = serviceProvider.GetService<BrickLinkCredentials>();
         var credentials2 = serviceProvider.GetService<BrickLinkCredentials>();
 
@@ -360,7 +360,7 @@ public class ServiceCollectionExtensionsTests
 
         // Assert
         var serviceProvider = services.BuildServiceProvider();
-        
+
         var handler1 = serviceProvider.GetService<AuthenticationHandler>();
         var handler2 = serviceProvider.GetService<AuthenticationHandler>();
 

@@ -134,10 +134,10 @@ public static class AuthenticatedHttpClientFactory
     private static void ConfigureHttpClientForBrickLink(HttpClient httpClient, string? baseUrl)
     {
         // Set base address
-        var apiBaseUrl = string.IsNullOrWhiteSpace(baseUrl) 
-            ? BrickLinkHttpClient.DefaultBaseUrl 
+        var apiBaseUrl = string.IsNullOrWhiteSpace(baseUrl)
+            ? BrickLinkHttpClient.DefaultBaseUrl
             : baseUrl;
-            
+
         httpClient.BaseAddress = new Uri(apiBaseUrl);
 
         // Configure default headers

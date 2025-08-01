@@ -41,7 +41,7 @@ public class AuthenticatedHttpClientFactoryTests : IDisposable
         Assert.NotNull(httpClient);
         Assert.Equal(new Uri(BrickLinkHttpClient.DefaultBaseUrl), httpClient.BaseAddress);
         Assert.Equal(TimeSpan.FromSeconds(30), httpClient.Timeout);
-        
+
         // Verify default headers
         Assert.Contains("User-Agent", httpClient.DefaultRequestHeaders.Select(h => h.Key));
         Assert.Contains("Accept", httpClient.DefaultRequestHeaders.Select(h => h.Key));
@@ -233,7 +233,7 @@ public class AuthenticatedHttpClientFactoryTests : IDisposable
         // Assert
         var header = httpClient.DefaultRequestHeaders.FirstOrDefault(h => h.Key == "Accept-Encoding");
         Assert.False(header.Equals(default(KeyValuePair<string, IEnumerable<string>>)), "Accept-Encoding header should be present");
-        
+
         var headerValues = header.Value.ToList();
         Assert.Contains("gzip", headerValues);
         Assert.Contains("deflate", headerValues);

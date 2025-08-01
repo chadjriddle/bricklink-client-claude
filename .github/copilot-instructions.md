@@ -288,3 +288,11 @@ When suggesting test code:
 5. **Use descriptive test names** - Clearly indicate what is being tested
 6. **Arrange-Act-Assert pattern** - Structure tests clearly
 7. **Test async methods properly** - Use appropriate async test patterns
+
+## Development Memories
+
+### Project Coverage Strategy
+- The last few PRs have failed the coverage test, specifically for path coverage, ensure that all code coverage is complete for any changes made
+
+### Commit and PR Guidelines
+- Ensure that code is committed and a PR generated at the end of a task
