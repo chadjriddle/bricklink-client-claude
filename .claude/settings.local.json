@@ -40,7 +40,8 @@
       "Bash(powershell:*)",
       "WebFetch(domain:docs.anthropic.com)",
       "Bash(start ./TestResults/coveragereport/BrickLink.Client_HttpLoggingHandler.html)",
-      "Bash(dotnet run:*)"
+      "Bash(dotnet run:*)",
+      "Bash(start:*)"
     ],
     "deny": []
   }
