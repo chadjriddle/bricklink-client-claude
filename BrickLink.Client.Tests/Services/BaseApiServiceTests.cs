@@ -448,8 +448,8 @@ public class BaseApiServiceTests : IDisposable
         // We'll use a circular reference which should cause JsonException
         var circularRef = new CircularReferenceModel();
         circularRef.Self = circularRef;
-        
-        var exception = await Assert.ThrowsAsync<BrickLinkApiException>(() => 
+
+        var exception = await Assert.ThrowsAsync<BrickLinkApiException>(() =>
             _apiService.PostTestWithCircularReferenceAsync("test", circularRef));
         Assert.Contains("Failed to serialize request data to JSON", exception.Message);
         Assert.Equal(HttpStatusCode.BadRequest, exception.StatusCode);
@@ -654,7 +654,7 @@ public class BaseApiServiceTests : IDisposable
         }
 
         protected override string HealthCheckEndpoint => "custom-health";
-        
+
         public string TestHealthCheckEndpoint => HealthCheckEndpoint;
     }
 
