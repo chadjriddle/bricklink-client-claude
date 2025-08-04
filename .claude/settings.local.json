@@ -45,7 +45,8 @@
       "Bash(start:*)",
       "WebFetch(domain:www.bricklink.com)",
       "WebFetch(domain:httpbin.org)",
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(grep:*)"
     ],
     "deny": [],
     "defaultMode": "acceptEdits"
