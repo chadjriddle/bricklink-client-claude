@@ -94,7 +94,7 @@ public abstract class BaseApiService : IApiService, IDisposable
         var jsonContent = SerializeRequest(requestData);
         using var content = BrickLinkHttpClient.CreateJsonContent(jsonContent);
         using var response = await _httpClient.PostAsync(requestUri, content, cancellationToken).ConfigureAwait(false);
-        
+
         return await ProcessResponseAsync<TResponse>(response, cancellationToken).ConfigureAwait(false);
     }
 
@@ -133,7 +133,7 @@ public abstract class BaseApiService : IApiService, IDisposable
         var jsonContent = SerializeRequest(requestData);
         using var content = BrickLinkHttpClient.CreateJsonContent(jsonContent);
         using var response = await _httpClient.PutAsync(requestUri, content, cancellationToken).ConfigureAwait(false);
-        
+
         return await ProcessResponseAsync<TResponse>(response, cancellationToken).ConfigureAwait(false);
     }
 
@@ -197,7 +197,7 @@ public abstract class BaseApiService : IApiService, IDisposable
         }
         catch (JsonException ex)
         {
-            throw new BrickLinkApiException("Failed to serialize request data to JSON.", HttpStatusCode.BadRequest, 
+            throw new BrickLinkApiException("Failed to serialize request data to JSON.", HttpStatusCode.BadRequest,
                 (int)HttpStatusCode.BadRequest, "Request serialization failed.", ex);
         }
     }
@@ -222,10 +222,10 @@ public abstract class BaseApiService : IApiService, IDisposable
         try
         {
             var apiResponse = JsonSerializer.Deserialize<ApiResponse<T>>(content, _jsonOptions);
-            
+
             if (apiResponse?.Meta == null)
             {
-                throw new BrickLinkApiException("Invalid API response format: missing metadata.", 
+                throw new BrickLinkApiException("Invalid API response format: missing metadata.",
                     response.StatusCode, 0, "The API response does not contain the expected metadata structure.");
             }
 
@@ -239,7 +239,7 @@ public abstract class BaseApiService : IApiService, IDisposable
         }
         catch (JsonException ex)
         {
-            throw new BrickLinkApiException("Failed to deserialize API response.", response.StatusCode, 
+            throw new BrickLinkApiException("Failed to deserialize API response.", response.StatusCode,
                 (int)response.StatusCode, "Response deserialization failed.", ex);
         }
     }
@@ -268,7 +268,7 @@ public abstract class BaseApiService : IApiService, IDisposable
 
         // Create appropriate exception based on status code
         var message = $"API request failed with status {(int)response.StatusCode} ({response.StatusCode})";
-        
+
         throw response.StatusCode switch
         {
             HttpStatusCode.Unauthorized => BrickLinkApiException.CreateAuthenticationError(message),
