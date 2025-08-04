@@ -25,6 +25,12 @@ public abstract class BaseApiService : IApiService, IDisposable
     public virtual string BaseUrl => _httpClient.BaseUrl.ToString();
 
     /// <summary>
+    /// Gets the health check endpoint used for service health verification.
+    /// Derived classes can override this to use a different endpoint.
+    /// </summary>
+    protected virtual string HealthCheckEndpoint => "colors";
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="BaseApiService"/> class.
     /// </summary>
     /// <param name="httpClient">The HTTP client to use for API requests.</param>
@@ -48,8 +54,8 @@ public abstract class BaseApiService : IApiService, IDisposable
         try
         {
             // Make a simple request to check connectivity
-            // Most services can use the colors endpoint as a lightweight health check
-            using var response = await _httpClient.GetAsync("colors", cancellationToken).ConfigureAwait(false);
+            // Use configurable health check endpoint for flexibility
+            using var response = await _httpClient.GetAsync(HealthCheckEndpoint, cancellationToken).ConfigureAwait(false);
             return response.IsSuccessStatusCode;
         }
         catch
@@ -235,7 +241,14 @@ public abstract class BaseApiService : IApiService, IDisposable
                 throw BrickLinkApiException.FromApiResponse(response.StatusCode, apiResponse.Meta);
             }
 
-            return apiResponse.Data!;
+            // Ensure data is not null before returning
+            if (apiResponse.Data == null)
+            {
+                throw new BrickLinkApiException("Invalid API response format: missing data.",
+                    response.StatusCode, apiResponse.Meta.Code, "The API response does not contain the expected data structure.");
+            }
+
+            return apiResponse.Data;
         }
         catch (JsonException ex)
         {

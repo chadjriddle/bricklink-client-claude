@@ -219,6 +219,28 @@ public class BaseApiServiceTests : IDisposable
         Assert.Equal("Bad Request", exception.Message);
     }
 
+    [Fact]
+    public async Task GetAsync_WithNullDataInSuccessResponse_ThrowsBrickLinkApiException()
+    {
+        // Arrange
+        var apiResponse = new ApiResponse<TestModel>
+        {
+            Meta = new Meta { Code = 200, Message = "OK" },
+            Data = null
+        };
+        var json = JsonSerializer.Serialize(apiResponse);
+        var response = new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StringContent(json, Encoding.UTF8, "application/json")
+        };
+        _mockHandler.SetResponse(response);
+
+        // Act & Assert
+        var exception = await Assert.ThrowsAsync<BrickLinkApiException>(() => _apiService.GetTestAsync("test"));
+        Assert.Contains("missing data", exception.Message);
+        Assert.Equal(200, exception.Code);
+    }
+
     #endregion
 
     #region POST Tests
@@ -412,6 +434,29 @@ public class BaseApiServiceTests : IDisposable
 
     #endregion
 
+    #region Serialization Tests
+
+    [Fact]
+    public async Task PostAsync_WithSerializationError_ThrowsBrickLinkApiException()
+    {
+        // Arrange - Create an object that will fail to serialize
+        var response = new HttpResponseMessage(HttpStatusCode.OK);
+        _mockHandler.SetResponse(response);
+
+        // Act & Assert
+        // This tests the SerializeRequest exception handling by trying to serialize a problematic object
+        // We'll use a circular reference which should cause JsonException
+        var circularRef = new CircularReferenceModel();
+        circularRef.Self = circularRef;
+        
+        var exception = await Assert.ThrowsAsync<BrickLinkApiException>(() => 
+            _apiService.PostTestWithCircularReferenceAsync("test", circularRef));
+        Assert.Contains("Failed to serialize request data to JSON", exception.Message);
+        Assert.Equal(HttpStatusCode.BadRequest, exception.StatusCode);
+    }
+
+    #endregion
+
     #region Error Handling Tests
 
     [Fact]
@@ -462,6 +507,45 @@ public class BaseApiServiceTests : IDisposable
         Assert.Contains("internal server error", exception.Description!, StringComparison.OrdinalIgnoreCase);
     }
 
+    [Fact]
+    public async Task HandleErrorResponseAsync_WithParseableErrorResponse_ThrowsApiExceptionWithDetails()
+    {
+        // Arrange
+        var errorResponse = new ApiResponse<object>
+        {
+            Meta = new Meta { Code = 403, Message = "Forbidden", Description = "Access denied" }
+        };
+        var json = JsonSerializer.Serialize(errorResponse);
+        var response = new HttpResponseMessage(HttpStatusCode.Forbidden)
+        {
+            Content = new StringContent(json, Encoding.UTF8, "application/json")
+        };
+        _mockHandler.SetResponse(response);
+
+        // Act & Assert
+        var exception = await Assert.ThrowsAsync<BrickLinkApiException>(() => _apiService.GetTestAsync("test"));
+        Assert.Equal(HttpStatusCode.Forbidden, exception.StatusCode);
+        Assert.Equal(403, exception.Code);
+        Assert.Equal("Forbidden", exception.Message);
+        Assert.Equal("Access denied", exception.Description);
+    }
+
+    [Fact]
+    public async Task HandleErrorResponseAsync_WithUnparseableErrorResponse_ThrowsGenericException()
+    {
+        // Arrange
+        var response = new HttpResponseMessage(HttpStatusCode.BadGateway)
+        {
+            Content = new StringContent("Bad Gateway", Encoding.UTF8, "text/html")
+        };
+        _mockHandler.SetResponse(response);
+
+        // Act & Assert
+        var exception = await Assert.ThrowsAsync<BrickLinkApiException>(() => _apiService.GetTestAsync("test"));
+        Assert.Equal(HttpStatusCode.BadGateway, exception.StatusCode);
+        Assert.Contains("Bad Gateway", exception.Description);
+    }
+
     #endregion
 
     #region Disposal Tests
@@ -505,6 +589,26 @@ public class BaseApiServiceTests : IDisposable
 
     #region Test Helpers
 
+    [Fact]
+    public void HealthCheckEndpoint_DefaultValue_ReturnsColors()
+    {
+        // Arrange & Act
+        var service = new TestApiService(_brickLinkClient);
+
+        // Assert
+        Assert.Equal("colors", service.TestHealthCheckEndpoint);
+    }
+
+    [Fact]
+    public void HealthCheckEndpoint_CanBeOverridden_ReturnsCustomValue()
+    {
+        // Arrange & Act
+        var service = new CustomHealthCheckApiService(_brickLinkClient);
+
+        // Assert
+        Assert.Equal("custom-health", service.TestHealthCheckEndpoint);
+    }
+
     /// <summary>
     /// Test implementation of BaseApiService for testing purposes.
     /// </summary>
@@ -514,6 +618,8 @@ public class BaseApiServiceTests : IDisposable
             : base(httpClient, disposeHttpClient)
         {
         }
+
+        public string TestHealthCheckEndpoint => HealthCheckEndpoint;
 
         public Task<TestModel> GetTestAsync(string uri)
             => GetAsync<TestModel>(uri);
@@ -530,8 +636,26 @@ public class BaseApiServiceTests : IDisposable
         public Task<TestModel> DeleteTestAsync(string uri)
             => DeleteAsync<TestModel>(uri);
 
+        public Task<TestModel> PostTestWithCircularReferenceAsync(string uri, CircularReferenceModel data)
+            => PostAsync<CircularReferenceModel, TestModel>(uri, data);
+
         public static string TestBuildQueryString(IEnumerable<KeyValuePair<string, string?>> parameters)
             => BuildQueryString(parameters);
+    }
+
+    /// <summary>
+    /// Test implementation with custom health check endpoint.
+    /// </summary>
+    private class CustomHealthCheckApiService : BaseApiService
+    {
+        public CustomHealthCheckApiService(BrickLinkHttpClient httpClient, bool disposeHttpClient = false)
+            : base(httpClient, disposeHttpClient)
+        {
+        }
+
+        protected override string HealthCheckEndpoint => "custom-health";
+        
+        public string TestHealthCheckEndpoint => HealthCheckEndpoint;
     }
 
     /// <summary>
@@ -541,6 +665,15 @@ public class BaseApiServiceTests : IDisposable
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
+    }
+
+    /// <summary>
+    /// Test model with circular reference for testing serialization errors.
+    /// </summary>
+    private class CircularReferenceModel
+    {
+        public int Id { get; set; }
+        public CircularReferenceModel? Self { get; set; }
     }
 
     /// <summary>
